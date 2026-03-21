@@ -1,6 +1,6 @@
 package com.daker.util.code;
 
-import com.ibridge.util.ApiResponse;
+import com.daker.util.ApiResponse;
 import org.springframework.http.HttpStatus;
 
 public interface BaseErrorCode {
