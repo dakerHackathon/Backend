@@ -1,12 +1,11 @@
 package com.daker.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Article")
@@ -21,7 +20,7 @@ public class Article {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team")
     private Team team;
 
     @Column(length = 255)
@@ -38,4 +37,7 @@ public class Article {
 
     @Column
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TargetPosition> targetPositions = new ArrayList<>();
 }

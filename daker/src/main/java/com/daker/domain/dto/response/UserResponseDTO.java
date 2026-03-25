@@ -8,7 +8,7 @@ public class UserResponseDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public class LoginDTO {
+    public static class LoginDTO {
         Long userId;
     }
 }

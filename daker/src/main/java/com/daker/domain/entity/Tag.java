@@ -1,11 +1,10 @@
 package com.daker.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Tag")
@@ -21,4 +20,7 @@ public class Tag {
 
     @Column(length = 255)
     private String name;
+
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HackathonTag> hackathonTags = new ArrayList<>();
 }

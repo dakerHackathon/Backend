@@ -1,12 +1,11 @@
 package com.daker.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Hackathon")
@@ -34,4 +33,13 @@ public class Hackathon {
 
     @Lob
     private String condition;
+
+    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HackathonTag> hackathonTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamHackathon> teamHackathons = new ArrayList<>();
 }

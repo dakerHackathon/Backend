@@ -1,10 +1,10 @@
 package com.daker.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Position")
@@ -20,4 +20,10 @@ public class Position {
 
     @Column(length = 255)
     private String name;
+
+    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TargetPosition> targetPositions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserTeam> userTeams = new ArrayList<>();
 }

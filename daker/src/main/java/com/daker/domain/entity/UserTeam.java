@@ -1,11 +1,7 @@
 package com.daker.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "UserTeam")
@@ -28,7 +24,7 @@ public class UserTeam {
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "position")
+    @JoinColumn(name = "position_id")
     private Position position;
 
     @Column
