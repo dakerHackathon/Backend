@@ -3,10 +3,7 @@ package com.daker.controller;
 import com.daker.service.UserService;
 import com.daker.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.daker.domain.dto.request.UserRequestDTO;
 import com.daker.domain.dto.response.UserResponseDTO;
@@ -38,6 +35,17 @@ public class UserController {
         catch (Exception e) {
             System.out.println("failure return: " + e.getMessage());
             return ApiResponse.onFailure("404", e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{userId}/delete")
+    public ApiResponse withdrawalMembership(@PathVariable Long userId) {
+        try {
+            userService.withdrawalMembership(userId);
+        } catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure("404", e.getMessage());
+
         }
     }
 }

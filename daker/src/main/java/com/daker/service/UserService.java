@@ -32,4 +32,8 @@ public class UserService {
     
         userRepository.save(user);
     }
+
+    public void withdrawalMembership(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }
