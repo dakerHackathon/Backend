@@ -31,7 +31,7 @@ public class Hackathon {
     @Column(length = 255)
     private String location;
 
-    @Lob
+    @Column
     private String condition;
 
     @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)

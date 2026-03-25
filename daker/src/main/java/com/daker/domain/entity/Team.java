@@ -21,7 +21,7 @@ public class Team {
     @Column(length = 255)
     private String name;
 
-    @Lob
+    @Column
     private String description;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)

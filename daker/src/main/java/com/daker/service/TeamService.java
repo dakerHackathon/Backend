@@ -27,7 +27,6 @@ public class TeamService {
                 .sorted((t1, t2) ->
                         Integer.compare(getTotalPoint(t2), getTotalPoint(t1)) // 내림차순
                 )
-                .limit(10)
                 .toList();
 
         List<TeamResponseDTO.TeamIdandNameDTO> result = topTeams.stream()
