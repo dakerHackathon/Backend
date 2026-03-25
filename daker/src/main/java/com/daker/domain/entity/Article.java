@@ -20,7 +20,7 @@ public class Article {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team")
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @Column(length = 255)
