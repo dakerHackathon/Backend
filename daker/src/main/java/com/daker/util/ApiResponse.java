@@ -42,4 +42,9 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> onFailure(String code, String message) {
         return new ApiResponse<>(false, code, message, null);
     }
+
+    //실패 응답 생성 메서드 (코드 없음)
+    public static <T> ApiResponse<T> onFailure(String message) {
+        return new ApiResponse<>(false, "404", message, null);
+    }
 }

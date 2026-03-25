@@ -22,7 +22,7 @@ public class UserController {
         }
         catch (Exception e) {
             System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure("404", e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
         }
     }
 
@@ -34,7 +34,7 @@ public class UserController {
         }
         catch (Exception e) {
             System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure("404", e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
         }
     }
 
@@ -42,10 +42,10 @@ public class UserController {
     public ApiResponse withdrawalMembership(@PathVariable Long userId) {
         try {
             userService.withdrawalMembership(userId);
+            return ApiResponse.onSuccess(null);
         } catch (Exception e) {
             System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure("404", e.getMessage());
-
+            return ApiResponse.onFailure(e.getMessage());
         }
     }
 }
