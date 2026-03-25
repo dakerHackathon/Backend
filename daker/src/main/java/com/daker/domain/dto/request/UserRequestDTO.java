@@ -10,4 +10,16 @@ public class UserRequestDTO {
         String loginId;
         String password;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    class SignupDTO {
+        String email;
+        String loginId;
+        String password;
+        String name;
+        String nickName;
+    }
 }

@@ -17,4 +17,16 @@ public class UserController {
             return ApiResponse.onFailure("404", e.getMessage());
         }
     }
+
+    @PostMapping("/signup")
+    public ApiResponse<> signup(@RequestBody UserRequestDTO.SignupDTO request) {
+        try {
+            userService.signup(request);
+            return ApiResponse.onSuccess();
+        }
+        catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure("404", e.getMessage());
+        }
+    }
 }

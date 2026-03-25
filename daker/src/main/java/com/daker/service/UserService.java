@@ -13,4 +13,15 @@ public class UserService {
                 .userId(user.getId())
                 .build();
     }
+
+    public void signup(UserRequestDTO.SignupDTO request) {
+        User user = User.builder
+            .email(request.getEmail())
+            .loginId(request.getLoginId())
+            .password(request.getPassword())
+            .name(request.getName())
+            .nickname(request.getNickName()).build();
+    
+        userRepository.save(user);
+    }
 }
