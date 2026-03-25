@@ -1,5 +1,8 @@
 package com.daker.controller;
 
+import com.daker.domain.dto.request.MessageRequestDTO;
+import com.daker.domain.dto.response.MessageResponseDTO;
+import com.daker.service.MessageService;
 import com.daker.service.UserService;
 import com.daker.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import com.daker.domain.dto.response.UserResponseDTO;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final MessageService messageService;
 
     @PostMapping("/login")
     public ApiResponse<UserResponseDTO.LoginDTO> login(@RequestBody UserRequestDTO.LoginDTO request) {
@@ -42,6 +46,29 @@ public class UserController {
     public ApiResponse withdrawalMembership(@PathVariable Long userId) {
         try {
             userService.withdrawalMembership(userId);
+            return ApiResponse.onSuccess(null);
+        } catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
+        }
+    }
+
+    // 쪽지
+    @GetMapping("/{userId}/message")
+    public ApiResponse<MessageResponseDTO.MessagesDTO> getMessages(@PathVariable Long userId) {
+        try {
+            MessageResponseDTO.MessagesDTO data = messageService.getMessages(userId);
+            return ApiResponse.onSuccess(data);
+        } catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{userId}/message/star")
+    public ApiResponse starMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.MessageIdDTO request) {
+        try {
+            messageService.starMessage(request);
             return ApiResponse.onSuccess(null);
         } catch (Exception e) {
             System.out.println("failure return: " + e.getMessage());

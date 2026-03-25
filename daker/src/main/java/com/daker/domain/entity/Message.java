@@ -29,7 +29,7 @@ public class Message {
     private String title;
 
     @Column(length = 255)
-    private String message;
+    private String content;
 
     @Column
     private Boolean isRead;
