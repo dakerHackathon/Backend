@@ -1,12 +1,14 @@
 package com.daker.domain.dto.request;
 
+import lombok.*;
+
 public class UserRequestDTO {
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    class LoginDTO {
+    public static class LoginDTO {
         String loginId;
         String password;
     }
@@ -15,7 +17,7 @@ public class UserRequestDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    class SignupDTO {
+    public static class SignupDTO {
         String email;
         String loginId;
         String password;

@@ -1,5 +1,16 @@
 package com.daker.controller;
 
+import com.daker.service.UserService;
+import com.daker.util.ApiResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.daker.domain.dto.request.UserRequestDTO;
+import com.daker.domain.dto.response.UserResponseDTO;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -19,10 +30,10 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ApiResponse<> signup(@RequestBody UserRequestDTO.SignupDTO request) {
+    public ApiResponse signup(@RequestBody UserRequestDTO.SignupDTO request) {
         try {
             userService.signup(request);
-            return ApiResponse.onSuccess();
+            return ApiResponse.onSuccess(null);
         }
         catch (Exception e) {
             System.out.println("failure return: " + e.getMessage());
