@@ -37,6 +37,9 @@ public class User {
     private Float temperature;
 
     @Column
+    private String description;
+
+    @Column
     private String portfolio;
 
     @Column
