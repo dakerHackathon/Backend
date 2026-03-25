@@ -31,7 +31,7 @@ public class Team {
     private List<UserTeam> userTeams = new ArrayList<>();
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TeamEnter> teamEnters = new ArrayList<>();
+    private List<TemperatureSet> temperatureSets = new ArrayList<>();
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamHackathon> teamHackathons = new ArrayList<>();

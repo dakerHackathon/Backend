@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,5 +45,24 @@ public class MessageService {
     public void starMessage(MessageRequestDTO.MessageIdDTO request) {
         Message message = messageRepository.findById(request.getMessageId()).get();
         message.setIsStar(!message.getIsStar());
+    }
+
+    public void sendMessage(long userId, MessageRequestDTO.sendMessageDTO request) {
+        User user = userRepository.findById(userId).get();
+        Message message = Message.builder()
+                .sender(user)
+                .receiver(userRepository.findByEmail(request.getEmail()))
+                .title(request.getTitle())
+                .content(request.getContent())
+                .sendAt(LocalDateTime.now())
+                .isRead(false)
+                .isStar(false).build();
+
+        messageRepository.save(message);
+    }
+
+    public void deleteMessage(long messageId) {
+        Message message = messageRepository.findById(messageId).get();
+        messageRepository.delete(message);
     }
 }

@@ -65,10 +65,32 @@ public class UserController {
         }
     }
 
+    @PostMapping("/{userId}/message/send")
+    public ApiResponse sendMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.sendMessageDTO request) {
+        try {
+            messageService.sendMessage(userId, request);
+            return ApiResponse.onSuccess(null);
+        } catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
+        }
+    }
+
     @PostMapping("/{userId}/message/star")
     public ApiResponse starMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.MessageIdDTO request) {
         try {
             messageService.starMessage(request);
+            return ApiResponse.onSuccess(null);
+        } catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{userId}/message/delete")
+    public ApiResponse deleteMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.MessageIdDTO request) {
+        try {
+            messageService.deleteMessage(request.getMessageId());
             return ApiResponse.onSuccess(null);
         } catch (Exception e) {
             System.out.println("failure return: " + e.getMessage());

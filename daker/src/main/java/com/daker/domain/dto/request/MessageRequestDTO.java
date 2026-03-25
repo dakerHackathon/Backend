@@ -14,4 +14,14 @@ public class MessageRequestDTO {
     public static class MessageIdDTO {
         long messageId;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class sendMessageDTO {
+        String email;
+        String title;
+        String content;
+    }
 }
