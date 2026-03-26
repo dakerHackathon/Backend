@@ -61,10 +61,10 @@ public class User {
     private List<UserTeam> userTeams = new ArrayList<>();
 
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> temperatureSets = new ArrayList<>();
+    private List<TemperatureSet> temperatureSets = new ArrayList<>();
 
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> temperatureGets = new ArrayList<>();
+    private List<TemperatureSet> temperatureGets = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
