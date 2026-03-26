@@ -9,4 +9,11 @@ import java.util.List;
 
 public class TeamResponseDTO {
 
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamIdDTO {
+        Long teamId;
+    }
 }

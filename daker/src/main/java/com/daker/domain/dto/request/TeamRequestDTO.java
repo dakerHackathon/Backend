@@ -9,4 +9,21 @@ import java.util.List;
 
 public class TeamRequestDTO {
 
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CreateTeamDTO {
+        String name;
+        String description;
+        int role;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RegisterHackathonDTO {
+        long hackathonId;
+    }
 }

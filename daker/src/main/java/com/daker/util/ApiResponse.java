@@ -28,6 +28,10 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, String.valueOf(HttpStatus.OK.value()), HttpStatus.OK.getReasonPhrase(), data);
     }
 
+    public static <T> ApiResponse<T> onSuccess() {
+        return new ApiResponse<>(true, String.valueOf(HttpStatus.OK.value()), HttpStatus.OK.getReasonPhrase(), null);
+    }
+
     //상태 코드를 받아서 사용하는 성공 응답 생성 메서드
     public static <T> ApiResponse<T> onSuccess(HttpStatus status, T result) {
         return new ApiResponse<>(true, String.valueOf(status.value()), status.getReasonPhrase(), result);
