@@ -1,6 +1,8 @@
 package com.daker.controller;
 
+import com.daker.domain.dto.request.ArticleRequestDTO;
 import com.daker.domain.dto.request.TeamRequestDTO;
+import com.daker.domain.dto.response.ArticleResponseDTO;
 import com.daker.domain.dto.response.TeamResponseDTO;
 import com.daker.service.TeamService;
 import com.daker.util.ApiResponse;
@@ -62,6 +64,19 @@ public class TeamController {
         try {
             teamService.expellUser(request);
             return ApiResponse.onSuccess();
+        } catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
+        }
+    }
+
+
+    // 모집 공고글 관련 API
+    @PostMapping("/{userId}/recruit/{teamId}")
+    public ApiResponse<ArticleResponseDTO.ArticleIdDTO> createArticle(@PathVariable Long userId, @PathVariable Long teamId, @RequestBody ArticleRequestDTO.CreateArticleDTO request) {
+        try {
+            ArticleResponseDTO.ArticleIdDTO data = teamService.createArticle(userId, teamId, request);
+            return ApiResponse.onSuccess(data);
         } catch (Exception e) {
             System.out.println("failure return: " + e.getMessage());
             return ApiResponse.onFailure(e.getMessage());

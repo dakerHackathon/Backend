@@ -1,7 +1,10 @@
 package com.daker.service;
 
 
+import com.daker.domain.dto.request.ArticleRequestDTO;
 import com.daker.domain.dto.request.TeamRequestDTO;
+import com.daker.domain.dto.response.ArticleResponseDTO;
+import com.daker.domain.dto.response.HackathonResponseDTO;
 import com.daker.domain.dto.response.TeamResponseDTO;
 import com.daker.domain.entity.*;
 import com.daker.repository.*;
@@ -10,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,6 +25,9 @@ public class TeamService {
     private final UserTeamRepository userTeamRepository;
     private final HackathonRepository hackathonRepository;
     private final TeamHackathonRepository teamHackathonRepository;
+    private final PositionRepository positionRepository;
+    private final TargetPositionRepository targetPositionRepository;
+    private final ArticleRepository articleRepository;
 
     public TeamResponseDTO.TeamIdDTO createTeam(long userId, TeamRequestDTO.CreateTeamDTO request) {
         User user = userRepository.findById(userId).get();
@@ -67,5 +74,33 @@ public class TeamService {
 
     public void expellUser(TeamRequestDTO.expellUserDTO request) {
         leaveTeam(request.getUserId(), request.getTeamId());
+    }
+
+
+
+    // 공고글 관련
+    public ArticleResponseDTO.ArticleIdDTO createArticle(long userId, long teamId, ArticleRequestDTO.CreateArticleDTO request) {
+        User user = userRepository.findById(userId).get();
+        Team team = teamRepository.findById(teamId).get();
+
+        Article article = new Article();
+        for(ArticleRequestDTO.lookingForDTO data : request.getLookingFor()) {
+            TargetPosition targets = TargetPosition.builder()
+                    .position(positionRepository.findById(data.getPositionId()).get())
+                    .count(data.getHeadCount())
+                    .article(article).build();
+            targetPositionRepository.save(targets);
+        }
+
+        article.setTeam(team);
+        article.setTitle(request.getTitle());
+        article.setContent(request.getContent());
+        article.setIsOpen(true);
+        article.setCreatedAt(LocalDateTime.now());
+
+        article = articleRepository.save(article);
+
+        return ArticleResponseDTO.ArticleIdDTO.builder()
+                .articleId(article.getId()).build();
     }
 }
