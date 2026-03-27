@@ -32,7 +32,7 @@ public class Hackathon {
     private String location;
 
     @Column
-    private String condition;
+    private String cond;
 
     @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
