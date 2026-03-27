@@ -49,4 +49,23 @@ public class TeamService {
                 .team(team).hackathon(hackathon).build();
         teamHackathonRepository.save(teamHackathon);
     }
+
+    public void deleteTeam(long userId, long teamId) {
+        User user = userRepository.findById(userId).get();
+        Team team = teamRepository.findById(teamId).get();
+
+        teamRepository.delete(team);
+    }
+
+    public void leaveTeam(long userId, long teamId) {
+        User user = userRepository.findById(userId).get();
+        Team team = teamRepository.findById(teamId).get();
+
+        UserTeam userTeam = userTeamRepository.findByUserAndTeam(user, team);
+        userTeamRepository.delete(userTeam);
+    }
+
+    public void expellUser(TeamRequestDTO.expellUserDTO request) {
+        leaveTeam(request.getUserId(), request.getTeamId());
+    }
 }

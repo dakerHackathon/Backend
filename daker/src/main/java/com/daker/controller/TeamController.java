@@ -34,4 +34,37 @@ public class TeamController {
             return ApiResponse.onFailure(e.getMessage());
         }
     }
+
+    @DeleteMapping("/{userId}/team")
+    public ApiResponse deleteTeam(@PathVariable Long userId, @RequestBody TeamRequestDTO.TeamIdDTO request) {
+        try {
+            teamService.deleteTeam(userId, request.getTeamId());
+            return ApiResponse.onSuccess();
+        } catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{userId}/team/leave")
+    public ApiResponse leaveTeam(@PathVariable Long userId, @RequestBody TeamRequestDTO.TeamIdDTO request) {
+        try {
+            teamService.leaveTeam(userId, request.getTeamId());
+            return ApiResponse.onSuccess();
+        } catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{userId}/team/expell")
+    public ApiResponse expellUser(@PathVariable Long userId, @RequestBody TeamRequestDTO.expellUserDTO request) {
+        try {
+            teamService.expellUser(request);
+            return ApiResponse.onSuccess();
+        } catch (Exception e) {
+            System.out.println("failure return: " + e.getMessage());
+            return ApiResponse.onFailure(e.getMessage());
+        }
+    }
 }

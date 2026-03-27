@@ -10,4 +10,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface UserTeamRepository extends JpaRepository<UserTeam, Long> {
+    @Query("SELECT ut FROM UserTeam ut WHERE ut.team = :team AND ut.user = :user")
+    UserTeam findByUserAndTeam(@Param("user") User user, @Param("team") Team team);
 }

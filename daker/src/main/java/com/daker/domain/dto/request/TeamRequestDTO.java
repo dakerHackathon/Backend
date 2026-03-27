@@ -26,4 +26,21 @@ public class TeamRequestDTO {
     public static class RegisterHackathonDTO {
         long hackathonId;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamIdDTO {
+        long teamId;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class expellUserDTO {
+        long teamId;
+        long userId;
+    }
 }
