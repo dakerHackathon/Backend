@@ -26,7 +26,7 @@ public class Article {
     @Column(length = 255)
     private String title;
 
-    @Column(length = 255)
+    @Column
     private String content;
 
     @Column

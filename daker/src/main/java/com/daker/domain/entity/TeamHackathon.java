@@ -24,5 +24,5 @@ public class TeamHackathon {
     private Hackathon hackathon;
 
     @Column
-    private Integer rank;
+    private Integer ranking;
 }
