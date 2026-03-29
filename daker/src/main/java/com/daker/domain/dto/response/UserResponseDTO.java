@@ -41,7 +41,7 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SkillIdDTO {
-        int id;
+        long id;
     }
 
     @Data
@@ -74,5 +74,23 @@ public class UserResponseDTO {
         long hackathonId;
         String hackathonName;
         String end;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserInfoListDTO {
+        List<UserInfoDTO> users;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserInfoDTO {
+        long userId;
+        String userName;
+        String userEmail;
     }
 }

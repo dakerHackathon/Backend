@@ -2,6 +2,8 @@ package com.daker.domain.dto.request;
 
 import lombok.*;
 
+import java.util.List;
+
 public class UserRequestDTO {
 
     @Data
@@ -23,5 +25,25 @@ public class UserRequestDTO {
         String password;
         String name;
         String nickName;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EditInfoDTO {
+        String nickName;
+        String description;
+        String portfolio;
+        String github;
+        List<SkillIdDTO> skills;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SkillIdDTO {
+        long id;
     }
 }

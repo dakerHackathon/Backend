@@ -70,4 +70,24 @@ public class UserController {
         UserResponseDTO.MyPageDTO data = userService.getMyPage(userId);
         return ApiResponse.onSuccess(data);
     }
+
+    @GetMapping("/{userId}/{teamId}/member")
+    public ApiResponse<UserResponseDTO.UserInfoListDTO> getTeamMembers(@PathVariable Long userId, @PathVariable Long teamId) {
+        UserResponseDTO.UserInfoListDTO data = userService.getTeamMembers(userId, teamId);
+        return ApiResponse.onSuccess(data);
+    }
+
+    @PatchMapping("/{userId}/mypage")
+    public ApiResponse editInfo(@PathVariable Long userId, @RequestBody UserRequestDTO.EditInfoDTO request) {
+        userService.editInfo(userId, request);
+        return ApiResponse.onSuccess();
+    }
+
+
+    // 검색
+    @GetMapping("/search")
+    public ApiResponse<UserResponseDTO.UserInfoDTO> userSearch(@RequestParam String query) {
+        UserResponseDTO.UserInfoDTO data = userService.search(query);
+        return ApiResponse.onSuccess(data);
+    }
 }

@@ -4,6 +4,8 @@ import com.daker.domain.dto.request.UserRequestDTO;
 import com.daker.domain.dto.response.UserResponseDTO;
 import com.daker.domain.entity.*;
 import com.daker.repository.*;
+import com.daker.util.code.ErrorCode;
+import com.daker.util.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ public class UserService {
     private final MessageRepository messageRepository;
     private final BookmarkRepository bookmarkRepository;
     private final TeamHackathonRepository teamHackathonRepository;
+    private final TeamRepository teamRepository;
+    private final SkillRepository skillRepository;
 
     public UserResponseDTO.LoginDTO login(UserRequestDTO.LoginDTO request) {
         User user = userRepository.findIdByLoginIdandPassword(request.getLoginId(), request.getPassword());
@@ -44,7 +48,10 @@ public class UserService {
     public void withdrawalMembership(Long userId) {
         userRepository.deleteById(userId);
     }
-
+    
+    
+    
+    // 마이페이지
     public UserResponseDTO.MyPageDTO getMyPage(long userId) {
         UserResponseDTO.MyPageDTO result = new UserResponseDTO.MyPageDTO();
 
@@ -66,9 +73,9 @@ public class UserService {
         result.setUnread(unreadCnt);
 
         List<UserResponseDTO.SkillIdDTO> skills = new ArrayList<>();
-        userSkillRepository.findSkillsByUser(user).forEach((i) -> {
+        userSkillRepository.findSkillsByUser(user).forEach((userSkill) -> {
             skills.add(UserResponseDTO.SkillIdDTO.builder()
-                    .id(i).build());
+                    .id(userSkill.getSkill().getId()).build());
         });
         result.setStills(skills);
 
@@ -110,5 +117,44 @@ public class UserService {
         result.setPart_hackathon(partHackathons);
 
         return result;
+    }
+
+    public UserResponseDTO.UserInfoListDTO getTeamMembers(long userId, long teamId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_404));
+
+        return UserResponseDTO.UserInfoListDTO.builder().users(
+                    userTeamRepository.findAllUsersByTeam(team).stream()
+                        .filter((member) -> member != user)
+                        .map((member) -> UserResponseDTO.UserInfoDTO.builder()
+                            .userId(member.getId())
+                            .userName(member.getNickname())
+                            .userEmail(member.getEmail()).build()
+                        ).toList()).build();
+    }
+
+    public void editInfo(long userId, UserRequestDTO.EditInfoDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_404));
+        user.setNickname(request.getNickName());
+        user.setDescription(request.getDescription());
+        user.setPortfolio(request.getPortfolio());
+        user.setGithub(request.getGithub());
+
+        userSkillRepository.findSkillsByUser(user).forEach((userSkill) -> userSkillRepository.delete(userSkill));
+        request.getSkills().forEach((id) -> {
+            Skill skill = skillRepository.findById(id.getId()).get();
+            userSkillRepository.save(UserSkill.builder()
+                    .user(user)
+                    .skill(skill).build());
+        });
+    }
+
+    public UserResponseDTO.UserInfoListDTO search(String query) {
+        return UserResponseDTO.UserInfoListDTO.builder()
+                .users(userRepository.search(query).stream().map((user) ->
+                        UserResponseDTO.UserInfoDTO.builder()
+                                .userId(user.getId())
+                                .userName(user.getNickname())
+                                .userEmail(user.getEmail()).build()).toList()).build();
     }
 }
