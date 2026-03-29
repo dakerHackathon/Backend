@@ -2,6 +2,8 @@ package com.daker.domain.dto.response;
 
 import lombok.*;
 
+import java.util.List;
+
 public class UserResponseDTO {
 
     @Data
@@ -10,5 +12,67 @@ public class UserResponseDTO {
     @AllArgsConstructor
     public static class LoginDTO {
         Long userId;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyPageDTO {
+        String email;
+        String nickname;
+        String description;
+        String portfolio;
+        String github;
+        List<SkillIdDTO> stills;
+        int point;
+        float temperature;
+        int rank;
+        int winCount;
+        int partCount;
+        List<PartHackathonDTO> part_hackathon;
+        List<PartTeamsDTO> teams;
+        List<SaveHackathonDTO> save_hackathon;
+        int unread;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SkillIdDTO {
+        int id;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PartHackathonDTO {
+        long hackathonId;
+        String hackathonName;
+        String start;
+        String end;
+        int position;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PartTeamsDTO {
+        long teamId;
+        String teamName;
+        String description;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SaveHackathonDTO {
+        long hackathonId;
+        String hackathonName;
+        String end;
     }
 }

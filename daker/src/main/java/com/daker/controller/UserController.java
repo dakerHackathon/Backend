@@ -20,81 +20,54 @@ public class UserController {
 
     @PostMapping("/login")
     public ApiResponse<UserResponseDTO.LoginDTO> login(@RequestBody UserRequestDTO.LoginDTO request) {
-        try {
-            UserResponseDTO.LoginDTO data = userService.login(request);
-            return ApiResponse.onSuccess(data);
-        }
-        catch (Exception e) {
-            System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure(e.getMessage());
-        }
+        UserResponseDTO.LoginDTO data = userService.login(request);
+        return ApiResponse.onSuccess(data);
     }
 
     @PostMapping("/signup")
     public ApiResponse signup(@RequestBody UserRequestDTO.SignupDTO request) {
-        try {
-            userService.signup(request);
-            return ApiResponse.onSuccess(null);
-        }
-        catch (Exception e) {
-            System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure(e.getMessage());
-        }
+        userService.signup(request);
+        return ApiResponse.onSuccess();
     }
 
     @DeleteMapping("/{userId}/delete")
     public ApiResponse withdrawalMembership(@PathVariable Long userId) {
-        try {
-            userService.withdrawalMembership(userId);
-            return ApiResponse.onSuccess(null);
-        } catch (Exception e) {
-            System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure(e.getMessage());
-        }
+        userService.withdrawalMembership(userId);
+        return ApiResponse.onSuccess();
     }
+
+
 
     // 쪽지
     @GetMapping("/{userId}/message")
-    public ApiResponse<MessageResponseDTO.MessagesDTO> getMessages(@PathVariable Long userId) {
-        try {
-            MessageResponseDTO.MessagesDTO data = messageService.getMessages(userId);
-            return ApiResponse.onSuccess(data);
-        } catch (Exception e) {
-            System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure(e.getMessage());
-        }
+    public ApiResponse<MessageResponseDTO.MessagesDTO> getMessages(@PathVariable Long userId, @RequestParam(defaultValue = "all") String filter) {
+        MessageResponseDTO.MessagesDTO data = messageService.getMessages(userId, filter);
+        return ApiResponse.onSuccess(data);
     }
 
     @PostMapping("/{userId}/message/send")
     public ApiResponse sendMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.sendMessageDTO request) {
-        try {
-            messageService.sendMessage(userId, request);
-            return ApiResponse.onSuccess(null);
-        } catch (Exception e) {
-            System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure(e.getMessage());
-        }
+        messageService.sendMessage(userId, request);
+        return ApiResponse.onSuccess();
     }
 
     @PostMapping("/{userId}/message/star")
     public ApiResponse starMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.MessageIdDTO request) {
-        try {
-            messageService.starMessage(request);
-            return ApiResponse.onSuccess(null);
-        } catch (Exception e) {
-            System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure(e.getMessage());
-        }
+        messageService.starMessage(request);
+        return ApiResponse.onSuccess();
     }
 
     @DeleteMapping("/{userId}/message/delete")
     public ApiResponse deleteMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.MessageIdDTO request) {
-        try {
-            messageService.deleteMessage(request.getMessageId());
-            return ApiResponse.onSuccess(null);
-        } catch (Exception e) {
-            System.out.println("failure return: " + e.getMessage());
-            return ApiResponse.onFailure(e.getMessage());
-        }
+        messageService.deleteMessage(request.getMessageId());
+        return ApiResponse.onSuccess();
+    }
+
+
+    // 마이페이지
+    @GetMapping("/{userId}/mypage")
+    public ApiResponse<UserResponseDTO.MyPageDTO> getMyPage(@PathVariable Long userId) {
+        UserResponseDTO.MyPageDTO data = userService.getMyPage(userId);
+        return ApiResponse.onSuccess(data);
     }
 }

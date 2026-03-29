@@ -40,6 +40,7 @@ public class TeamService {
         UserTeam userTeam = UserTeam.builder()
                 .team(team)
                 .user(user)
+                .position(positionRepository.findById(request.getRole()).get())
                 .leader(true).build();
         userTeamRepository.save(userTeam);
 
@@ -83,7 +84,15 @@ public class TeamService {
         User user = userRepository.findById(userId).get();
         Team team = teamRepository.findById(teamId).get();
 
-        Article article = new Article();
+        Article article = Article.builder()
+                        .team(team)
+                        .title(request.getTitle())
+                        .content(request.getContent())
+                        .isOpen(true)
+                        .createdAt(LocalDateTime.now())
+                        .contact(request.getContact()).build();
+        article = articleRepository.save(article);
+
         for(ArticleRequestDTO.lookingForDTO data : request.getLookingFor()) {
             TargetPosition targets = TargetPosition.builder()
                     .position(positionRepository.findById(data.getPositionId()).get())
@@ -91,14 +100,6 @@ public class TeamService {
                     .article(article).build();
             targetPositionRepository.save(targets);
         }
-
-        article.setTeam(team);
-        article.setTitle(request.getTitle());
-        article.setContent(request.getContent());
-        article.setIsOpen(true);
-        article.setCreatedAt(LocalDateTime.now());
-
-        article = articleRepository.save(article);
 
         return ArticleResponseDTO.ArticleIdDTO.builder()
                 .articleId(article.getId()).build();

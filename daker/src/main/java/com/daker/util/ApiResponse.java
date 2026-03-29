@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@JsonPropertyOrder({"isSuccess", "status", "code", "message", "data"})
+@JsonPropertyOrder({"isSuccess", "code", "message", "data"})
 public class ApiResponse<T> {
     @JsonProperty("isSuccess") // isSuccess라는 변수라는 것을 명시하는 Annotation
     private boolean isSuccess;

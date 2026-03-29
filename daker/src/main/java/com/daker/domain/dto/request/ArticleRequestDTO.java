@@ -25,7 +25,7 @@ public class ArticleRequestDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class lookingForDTO {
-        long positionId;
+        int positionId;
         int headCount;
     }
 }

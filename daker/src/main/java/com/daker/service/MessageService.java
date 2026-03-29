@@ -21,16 +21,26 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
 
-    public MessageResponseDTO.MessagesDTO getMessages(long userId) {
+    public MessageResponseDTO.MessagesDTO getMessages(long userId, String filter) {
         User user = userRepository.findById(userId).get();
-        List<Message> list = messageRepository.findByReceiverId(user);
+        List<Message> list = new ArrayList<>();
+        switch (filter) {
+            case "unread":
+                list = messageRepository.findUnreadByReceiver(user);
+                break;
+            case "star":
+                list = messageRepository.findStarByReceiver(user);
+                break;
+            default:
+                list = messageRepository.findAllByReceiver(user);
+        }
 
         List<MessageResponseDTO.MessagesSimpleInfo> result = list.stream()
                 .map(message -> {
                     MessageResponseDTO.MessagesSimpleInfo info = MessageResponseDTO.MessagesSimpleInfo.builder()
                             .id(message.getId())
                             .content(message.getContent())
-                            .sender(message.getReceiver().getNickname())
+                            .sender(message.getSender().getNickname())
                             .send_at(message.getSendAt().toString())
                             .isRead(message.getIsRead())
                             .isStar(message.getIsStar()).build();
