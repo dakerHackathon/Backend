@@ -16,4 +16,21 @@ public class TeamResponseDTO {
     public static class TeamIdDTO {
         Long teamId;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamInfoListDTO {
+        List<TeamInfoDTO> teams;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamInfoDTO {
+        Long teamId;
+        String teamName;
+    }
 }

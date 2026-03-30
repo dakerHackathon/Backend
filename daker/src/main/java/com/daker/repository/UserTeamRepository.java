@@ -18,4 +18,7 @@ public interface UserTeamRepository extends JpaRepository<UserTeam, Long> {
 
     @Query("SELECT ut.user FROM UserTeam ut WHERE ut.team = :team")
     List<User> findAllUsersByTeam(@Param("team") Team team);
+
+    @Query("SELECT ut.team FROM UserTeam ut WHERE ut.user = :user AND ut.leader = true")
+    List<Team> findOwnTeamsByUser(@Param("user") User user);
 }
