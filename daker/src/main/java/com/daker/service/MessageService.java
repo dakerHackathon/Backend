@@ -6,6 +6,7 @@ import com.daker.domain.entity.Message;
 import com.daker.domain.entity.User;
 import com.daker.repository.MessageRepository;
 import com.daker.repository.UserRepository;
+import com.daker.util.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.daker.util.code.ErrorCode.NOT_FOUND_404;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +53,13 @@ public class MessageService {
 
         return MessageResponseDTO.MessagesDTO.builder()
                 .messages(result).build();
+    }
+
+    public void readMessage(long messageId) {
+        Message message = messageRepository.findById(messageId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+
+        message.setIsRead(true);
+        messageRepository.save(message);
     }
 
     public void starMessage(MessageRequestDTO.MessageIdDTO request) {
