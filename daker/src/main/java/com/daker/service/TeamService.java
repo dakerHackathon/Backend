@@ -4,17 +4,17 @@ package com.daker.service;
 import com.daker.domain.dto.request.ArticleRequestDTO;
 import com.daker.domain.dto.request.TeamRequestDTO;
 import com.daker.domain.dto.response.ArticleResponseDTO;
-import com.daker.domain.dto.response.HackathonResponseDTO;
 import com.daker.domain.dto.response.TeamResponseDTO;
 import com.daker.domain.entity.*;
+import com.daker.domain.entity.mapping.TargetPosition;
+import com.daker.domain.entity.mapping.TeamHackathon;
+import com.daker.domain.entity.mapping.UserTeam;
 import com.daker.repository.*;
-import com.daker.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

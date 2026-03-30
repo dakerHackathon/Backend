@@ -1,5 +1,9 @@
 package com.daker.domain.entity;
 
+import com.daker.domain.entity.mapping.Bookmark;
+import com.daker.domain.entity.mapping.TeamEnter;
+import com.daker.domain.entity.mapping.UserSkill;
+import com.daker.domain.entity.mapping.UserTeam;
 import jakarta.persistence.*;
 import lombok.*;
 
