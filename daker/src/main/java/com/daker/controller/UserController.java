@@ -86,8 +86,8 @@ public class UserController {
 
     // 검색
     @GetMapping("/search")
-    public ApiResponse<UserResponseDTO.UserInfoDTO> userSearch(@RequestParam String query) {
-        UserResponseDTO.UserInfoDTO data = userService.search(query);
+    public ApiResponse<UserResponseDTO.UserInfoListDTO> userSearch(@RequestParam String query) {
+        UserResponseDTO.UserInfoListDTO data = userService.search(query);
         return ApiResponse.onSuccess(data);
     }
 }
