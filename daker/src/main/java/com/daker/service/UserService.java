@@ -31,6 +31,8 @@ public class UserService {
 
         return UserResponseDTO.LoginDTO.builder()
                 .userId(user.getId())
+                .userNickname(user.getNickname())
+                .userEmail(user.getEmail())
                 .build();
     }
 

@@ -12,6 +12,8 @@ public class UserResponseDTO {
     @AllArgsConstructor
     public static class LoginDTO {
         Long userId;
+        String userNickname;
+        String userEmail;
     }
 
     @Data
