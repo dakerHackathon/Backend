@@ -21,4 +21,52 @@ public interface UserTeamRepository extends JpaRepository<UserTeam, Long> {
 
     @Query("SELECT ut.team FROM UserTeam ut WHERE ut.user = :user AND ut.leader = true")
     List<Team> findOwnTeamsByUser(@Param("user") User user);
+
+    @Query("SELECT ut.user FROM UserTeam ut JOIN TeamHackathon th ON ut.team = th.team GROUP BY ut.user ORDER BY count(th.hackathon.id) DESC LIMIT 10")
+    List<User> getPartRankings();
+
+    @Query("SELECT ut.user FROM UserTeam ut JOIN TeamHackathon th ON ut.team = th.team WHERE th.ranking = 1 GROUP BY ut.user ORDER BY count(th.hackathon.id) DESC LIMIT 10")
+    List<User> getWinRankings();
+
+    @Query("""
+        SELECT COUNT(u) + 1
+        FROM User u
+        WHERE (
+            SELECT COUNT(DISTINCT th.hackathon.id)
+            FROM UserTeam ut
+            JOIN TeamHackathon th ON th.team = ut.team
+            WHERE ut.user = u
+              AND th.ranking = 1
+        ) > (
+            SELECT COUNT(DISTINCT th2.hackathon.id)
+            FROM UserTeam ut2
+            JOIN TeamHackathon th2 ON th2.team = ut2.team
+            WHERE ut2.user = :user
+              AND th2.ranking = 1
+        )
+    """)
+    int getMyWinRank(User user);
+
+    @Query("SELECT COUNT(DISTINCT th.hackathon.id) FROM UserTeam ut JOIN TeamHackathon th ON th.team = ut.team WHERE ut.user = :user AND th.ranking = 1")
+    int getWinCount(@Param("user") User user);
+
+    @Query("""
+        SELECT COUNT(u) + 1
+        FROM User u
+        WHERE (
+            SELECT COUNT(DISTINCT th.hackathon.id)
+            FROM UserTeam ut
+            JOIN TeamHackathon th ON th.team = ut.team
+            WHERE ut.user = u
+        ) > (
+            SELECT COUNT(DISTINCT th2.hackathon.id)
+            FROM UserTeam ut2
+            JOIN TeamHackathon th2 ON th2.team = ut2.team
+            WHERE ut2.user = :user
+        )
+    """)
+    int getMyPartRank(@Param("user") User user);
+
+    @Query("SELECT COUNT(DISTINCT th.hackathon.id) FROM UserTeam ut JOIN TeamHackathon th ON th.team = ut.team WHERE ut.user = :user")
+    int getPartCount(User user);
 }

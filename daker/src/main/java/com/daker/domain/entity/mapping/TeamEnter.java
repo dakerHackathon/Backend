@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "TeamEnter")
 @Data
@@ -22,6 +25,12 @@ public class TeamEnter {
     @Column
     private int type;
 
+    @Column
+    private String title;
+
+    @Column
+    private String content;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
@@ -29,4 +38,7 @@ public class TeamEnter {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private User receiver;
+
+    @Column
+    private LocalDateTime created_at;
 }
