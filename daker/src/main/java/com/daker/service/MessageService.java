@@ -71,7 +71,7 @@ public class MessageService {
         User user = userRepository.findById(userId).get();
         Message message = Message.builder()
                 .sender(user)
-                .receiver(userRepository.findByEmail(request.getEmail()))
+                .receiver(userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ApiException(NOT_FOUND_404)))
                 .title(request.getTitle())
                 .content(request.getContent())
                 .sendAt(LocalDateTime.now())

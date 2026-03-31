@@ -116,6 +116,8 @@ public class TeamService {
         tRow.setPosition(positionRepository.findById(request.getPositionId()).get());
 
         userTeamRepository.save(tRow);
+
+        // 팀 멤버의 역할을 수정한 경우, 공고글의 경우도 바뀌어야 하나?
     }
 
 
