@@ -4,17 +4,18 @@ package com.daker.service;
 import com.daker.domain.dto.request.ArticleRequestDTO;
 import com.daker.domain.dto.request.TeamRequestDTO;
 import com.daker.domain.dto.response.ArticleResponseDTO;
-import com.daker.domain.dto.response.HackathonResponseDTO;
 import com.daker.domain.dto.response.TeamResponseDTO;
 import com.daker.domain.entity.*;
 import com.daker.repository.*;
-import com.daker.util.ApiResponse;
+import com.daker.util.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import static com.daker.util.code.ErrorCode.NOT_FOUND_404;
+import static com.daker.util.code.ErrorCode.UNAUTHORIZED_401;
 
 @Service
 @RequiredArgsConstructor
@@ -73,8 +74,36 @@ public class TeamService {
         userTeamRepository.delete(userTeam);
     }
 
-    public void expellUser(TeamRequestDTO.expellUserDTO request) {
+    public void expellUser(TeamRequestDTO.ExpellUserDTO request) {
         leaveTeam(request.getUserId(), request.getTeamId());
+    }
+
+    public TeamResponseDTO.TeamIdDTO editTeam(long userId, long teamId, TeamRequestDTO.EditTeamInfoDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+
+        UserTeam ut = userTeamRepository.findByUserAndTeam(user, team);
+        if(!ut.getLeader()) throw new ApiException(UNAUTHORIZED_401);
+
+        team.setName(request.getName());
+        team.setDescription(request.getDescription());
+        team = teamRepository.save(team);
+
+        return TeamResponseDTO.TeamIdDTO.builder().teamId(team.getId()).build();
+    }
+
+    public void changeRole(long userId, long teamId, TeamRequestDTO.MemberEditDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+
+        UserTeam ut = userTeamRepository.findByUserAndTeam(user, team);
+        if(!ut.getLeader()) throw new ApiException(UNAUTHORIZED_401);
+
+        User target = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        UserTeam tRow = userTeamRepository.findByUserAndTeam(target, team);
+        tRow.setPosition(positionRepository.findById(request.getPositionId()).get());
+
+        userTeamRepository.save(tRow);
     }
 
 
@@ -93,7 +122,7 @@ public class TeamService {
                         .contact(request.getContact()).build();
         article = articleRepository.save(article);
 
-        for(ArticleRequestDTO.lookingForDTO data : request.getLookingFor()) {
+        for(ArticleRequestDTO.LookingForDTO data : request.getLookingFor()) {
             TargetPosition targets = TargetPosition.builder()
                     .position(positionRepository.findById(data.getPositionId()).get())
                     .count(data.getHeadCount())

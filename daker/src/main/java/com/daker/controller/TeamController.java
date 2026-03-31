@@ -40,8 +40,20 @@ public class TeamController {
     }
 
     @PatchMapping("/{userId}/team/expell")
-    public ApiResponse expellUser(@PathVariable Long userId, @RequestBody TeamRequestDTO.expellUserDTO request) {
+    public ApiResponse expellUser(@PathVariable Long userId, @RequestBody TeamRequestDTO.ExpellUserDTO request) {
         teamService.expellUser(request);
+        return ApiResponse.onSuccess();
+    }
+
+    @PatchMapping("/{userId}/team/{teamId}")
+    public ApiResponse<TeamResponseDTO.TeamIdDTO> editTeamInfo(@PathVariable Long userId, @PathVariable Long teamId, @RequestBody TeamRequestDTO.EditTeamInfoDTO request) {
+        TeamResponseDTO.TeamIdDTO data = teamService.editTeam(userId, teamId, request);
+        return ApiResponse.onSuccess(data);
+    }
+
+    @PatchMapping("/{userId}/team/{teamId}/member")
+    public ApiResponse editTeamMember(@PathVariable Long userId, @PathVariable Long teamId, @RequestBody TeamRequestDTO.MemberEditDTO request) {
+        teamService.changeRole(userId, teamId, request);
         return ApiResponse.onSuccess();
     }
 

@@ -57,7 +57,7 @@ public class MessageService {
         message.setIsStar(!message.getIsStar());
     }
 
-    public void sendMessage(long userId, MessageRequestDTO.sendMessageDTO request) {
+    public void sendMessage(long userId, MessageRequestDTO.SendMessageDTO request) {
         User user = userRepository.findById(userId).get();
         Message message = Message.builder()
                 .sender(user)

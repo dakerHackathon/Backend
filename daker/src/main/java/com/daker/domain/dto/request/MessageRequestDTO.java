@@ -19,7 +19,7 @@ public class MessageRequestDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class sendMessageDTO {
+    public static class SendMessageDTO {
         String email;
         String title;
         String content;

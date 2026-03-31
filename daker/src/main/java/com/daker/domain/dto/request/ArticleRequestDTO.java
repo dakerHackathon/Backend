@@ -16,7 +16,7 @@ public class ArticleRequestDTO {
     public static class CreateArticleDTO {
         String title;
         String content;
-        List<lookingForDTO> lookingFor;
+        List<LookingForDTO> lookingFor;
         String contact;
     }
 
@@ -24,7 +24,7 @@ public class ArticleRequestDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class lookingForDTO {
+    public static class LookingForDTO {
         int positionId;
         int headCount;
     }

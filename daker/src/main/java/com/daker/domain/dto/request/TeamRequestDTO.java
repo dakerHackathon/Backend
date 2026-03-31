@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 public class TeamRequestDTO {
 
     @Data
@@ -39,8 +37,26 @@ public class TeamRequestDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class expellUserDTO {
+    public static class ExpellUserDTO {
         long teamId;
         long userId;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EditTeamInfoDTO {
+        String name;
+        String description;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MemberEditDTO {
+        long userId;
+        int positionId;
     }
 }

@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/message/send")
-    public ApiResponse sendMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.sendMessageDTO request) {
+    public ApiResponse sendMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.SendMessageDTO request) {
         messageService.sendMessage(userId, request);
         return ApiResponse.onSuccess();
     }
