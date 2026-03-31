@@ -1,6 +1,6 @@
 package com.daker.repository;
 
-import com.daker.domain.entity.Bookmark;
+import com.daker.domain.entity.mapping.Bookmark;
 import com.daker.domain.entity.Hackathon;
 import com.daker.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,5 +1,8 @@
-package com.daker.domain.entity;
+package com.daker.domain.entity.mapping;
 
+import com.daker.domain.entity.Position;
+import com.daker.domain.entity.Team;
+import com.daker.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

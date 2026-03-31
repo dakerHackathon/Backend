@@ -1,8 +1,7 @@
 package com.daker.repository;
 
-import com.daker.domain.entity.Skill;
 import com.daker.domain.entity.User;
-import com.daker.domain.entity.UserSkill;
+import com.daker.domain.entity.mapping.UserSkill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

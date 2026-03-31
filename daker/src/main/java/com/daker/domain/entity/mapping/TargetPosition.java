@@ -1,5 +1,7 @@
-package com.daker.domain.entity;
+package com.daker.domain.entity.mapping;
 
+import com.daker.domain.entity.Article;
+import com.daker.domain.entity.Position;
 import jakarta.persistence.*;
 import lombok.*;
 

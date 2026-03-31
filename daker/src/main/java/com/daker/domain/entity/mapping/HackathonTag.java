@@ -1,5 +1,7 @@
-package com.daker.domain.entity;
+package com.daker.domain.entity.mapping;
 
+import com.daker.domain.entity.Hackathon;
+import com.daker.domain.entity.Tag;
 import jakarta.persistence.*;
 import lombok.*;
 

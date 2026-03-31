@@ -1,11 +1,13 @@
 package com.daker.service;
 
-
 import com.daker.domain.dto.request.ArticleRequestDTO;
 import com.daker.domain.dto.request.TeamRequestDTO;
 import com.daker.domain.dto.response.ArticleResponseDTO;
 import com.daker.domain.dto.response.TeamResponseDTO;
 import com.daker.domain.entity.*;
+import com.daker.domain.entity.mapping.TargetPosition;
+import com.daker.domain.entity.mapping.TeamHackathon;
+import com.daker.domain.entity.mapping.UserTeam;
 import com.daker.repository.*;
 import com.daker.util.exception.ApiException;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-
 import static com.daker.util.code.ErrorCode.NOT_FOUND_404;
 import static com.daker.util.code.ErrorCode.UNAUTHORIZED_401;
 
@@ -29,6 +30,17 @@ public class TeamService {
     private final PositionRepository positionRepository;
     private final TargetPositionRepository targetPositionRepository;
     private final ArticleRepository articleRepository;
+
+    public TeamResponseDTO.TeamInfoListDTO getOwnTeams(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+
+        return TeamResponseDTO.TeamInfoListDTO.builder().teams(
+                userTeamRepository.findOwnTeamsByUser(user).stream().map((team) -> TeamResponseDTO.TeamInfoDTO.builder()
+                    .teamId(team.getId())
+                    .teamName(team.getName()).build()
+                ).toList()
+        ).build();
+    }
 
     public TeamResponseDTO.TeamIdDTO createTeam(long userId, TeamRequestDTO.CreateTeamDTO request) {
         User user = userRepository.findById(userId).get();

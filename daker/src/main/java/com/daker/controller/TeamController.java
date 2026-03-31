@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class TeamController {
     private final TeamService teamService;
 
+    @GetMapping("/{userId}/team")
+    public ApiResponse<TeamResponseDTO.TeamInfoListDTO> getOwnTeams(@PathVariable Long userId) {
+        TeamResponseDTO.TeamInfoListDTO data = teamService.getOwnTeams(userId);
+        return ApiResponse.onSuccess(data);
+    }
+
     @PostMapping("/{userId}/team")
     public ApiResponse<TeamResponseDTO.TeamIdDTO> createTeam(@PathVariable Long userId, @RequestBody TeamRequestDTO.CreateTeamDTO request) {
         TeamResponseDTO.TeamIdDTO data = teamService.createTeam(userId, request);

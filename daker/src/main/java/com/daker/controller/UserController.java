@@ -45,6 +45,12 @@ public class UserController {
         return ApiResponse.onSuccess(data);
     }
 
+    @PostMapping("/{userId}/message/read")
+    public ApiResponse readMessage(@PathVariable long userId, @RequestBody MessageRequestDTO.MessageIdDTO request) {
+        messageService.readMessage(request.getMessageId());
+        return ApiResponse.onSuccess();
+    }
+
     @PostMapping("/{userId}/message/send")
     public ApiResponse sendMessage(@PathVariable Long userId, @RequestBody MessageRequestDTO.SendMessageDTO request) {
         messageService.sendMessage(userId, request);

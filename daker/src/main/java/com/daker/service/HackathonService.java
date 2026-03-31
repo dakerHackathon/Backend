@@ -1,7 +1,6 @@
 package com.daker.service;
 
-import com.daker.domain.dto.request.HackathonRequestDTO;
-import com.daker.domain.entity.Bookmark;
+import com.daker.domain.entity.mapping.Bookmark;
 import com.daker.domain.entity.Hackathon;
 import com.daker.domain.entity.User;
 import com.daker.repository.BookmarkRepository;

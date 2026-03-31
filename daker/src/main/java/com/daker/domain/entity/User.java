@@ -1,5 +1,9 @@
 package com.daker.domain.entity;
 
+import com.daker.domain.entity.mapping.Bookmark;
+import com.daker.domain.entity.mapping.TeamEnter;
+import com.daker.domain.entity.mapping.UserSkill;
+import com.daker.domain.entity.mapping.UserTeam;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -68,4 +72,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamEnter> teamEnters = new ArrayList<>();
 }

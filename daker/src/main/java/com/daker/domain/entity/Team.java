@@ -1,5 +1,8 @@
 package com.daker.domain.entity;
 
+import com.daker.domain.entity.mapping.TeamEnter;
+import com.daker.domain.entity.mapping.TeamHackathon;
+import com.daker.domain.entity.mapping.UserTeam;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,4 +38,7 @@ public class Team {
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamHackathon> teamHackathons = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamEnter> teamEnters = new ArrayList<>();
 }
