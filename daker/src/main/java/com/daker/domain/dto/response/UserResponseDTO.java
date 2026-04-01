@@ -129,4 +129,23 @@ public class UserResponseDTO {
         String userName;
         String teamName;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TemperatureSetListDTO {
+        List<TemperatureSetDTO> members;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TemperatureSetDTO {
+        long userId;
+        String userNickName;
+        String userEmail;
+        boolean canSet;
+    }
 }

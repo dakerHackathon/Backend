@@ -35,6 +35,7 @@ public class UserService {
     private final TeamRepository teamRepository;
     private final SkillRepository skillRepository;
     private final TeamEnterRepository teamEnterRepository;
+    private final TemperatureSetRepository temperatureSetRepository;
 
     public UserResponseDTO.LoginDTO login(UserRequestDTO.LoginDTO request) {
         User user = userRepository.findIdByLoginIdandPassword(request.getLoginId(), request.getPassword());
@@ -201,6 +202,22 @@ public class UserService {
                     .user(user)
                     .skill(skill).build());
         });
+    }
+
+    public UserResponseDTO.TemperatureSetListDTO getTemperatureSetting(long userId, long teamId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        UserTeam userTeams = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
+
+        return UserResponseDTO.TemperatureSetListDTO.builder()
+                .members(userTeamRepository.findAllUsersByTeam(userTeams.getTeam()).stream()
+                        .filter((u) -> u != user)
+                        .map((u) -> UserResponseDTO.TemperatureSetDTO.builder()
+                                .userId(u.getId())
+                                .userNickName(u.getNickname())
+                                .userEmail(u.getEmail())
+                                .canSet(temperatureSetRepository.findByFromUserAndToUserAndTeam(user, u, team).isEmpty()).build())
+                        .toList()).build();
     }
 
     public UserResponseDTO.UserInfoListDTO search(String query) {
