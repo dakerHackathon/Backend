@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.daker.util.code.ErrorCode.BAD_REQUEST;
@@ -23,15 +22,15 @@ public class RankService {
     private final UserRepository userRepository;
     private final UserTeamRepository userTeamRepository;
 
-    public RankResponseDTO.Top10DTO getRankings(String filter) {
+    public RankResponseDTO.TopDTO getRankings(String filter) {
         List<User> result = switch (filter) {
-            case "part" -> getPartRankings();
-            case "temp" -> getTempRankings();
-            case "win" -> getWinRankings();
+            case "part" -> userTeamRepository.getPartRankings();
+            case "temp" -> userRepository.findTop10ByOrderByTemperatureDesc();
+            case "win" -> userTeamRepository.getWinRankings();
             default -> throw new ApiException(BAD_REQUEST);
         };
 
-        return RankResponseDTO.Top10DTO.builder().ranks(
+        return RankResponseDTO.TopDTO.builder().ranks(
                 result.stream().map((user) ->
                     RankResponseDTO.RankDTO.builder()
                             .id(user.getId())
@@ -39,18 +38,6 @@ public class RankService {
                             .point(user.getPoint())
                             .github(user.getGithub()).build()).toList())
                 .build();
-    }
-
-    private List<User> getPartRankings() {
-        return userTeamRepository.getPartRankings();
-    }
-
-    private List<User> getTempRankings() {
-        return userRepository.findTop10ByOrderByTemperatureDesc();
-    }
-
-    private List<User> getWinRankings() {
-        return userTeamRepository.getWinRankings();
     }
 
     public RankResponseDTO.MyRankDTO getMyRanking(long userId) {
@@ -66,5 +53,28 @@ public class RankService {
                 .part(RankResponseDTO.RankPointDTO.builder()
                         .rank(userTeamRepository.getMyPartRank(user))
                         .point(userTeamRepository.getPartCount(user)).build()).build();
+    }
+
+    public RankResponseDTO.TopAllDTO getTop3() {
+        return RankResponseDTO.TopAllDTO.builder()
+                .win(userTeamRepository.getWinRankings().stream()
+                        .limit(3)
+                        .map((user) -> RankResponseDTO.SimpleRankDTO.builder()
+                                .nickname(user.getNickname())
+                                .point(userTeamRepository.getWinCount(user)).build())
+                        .toList())
+                .temp(userRepository.findTop10ByOrderByTemperatureDesc().stream()
+                        .limit(3)
+                        .map((user) -> RankResponseDTO.SimpleRankDTO.builder()
+                                .nickname(user.getNickname())
+                                .point(user.getTemperature()).build())
+                        .toList())
+                .part(userTeamRepository.getPartRankings().stream()
+                        .limit(3)
+                        .map((user) -> RankResponseDTO.SimpleRankDTO.builder()
+                                .nickname(user.getNickname())
+                                .point(userTeamRepository.getPartCount(user)).build())
+                        .toList())
+                .build();
     }
 }

@@ -13,14 +13,20 @@ public class RankController {
     private final RankService rankService;
 
     @GetMapping("/")
-    public ApiResponse<RankResponseDTO.Top10DTO> getRankings(@RequestParam String filter) {
-        RankResponseDTO.Top10DTO data = rankService.getRankings(filter);
+    public ApiResponse<RankResponseDTO.TopDTO> getRankings(@RequestParam String filter) {
+        RankResponseDTO.TopDTO data = rankService.getRankings(filter);
         return ApiResponse.onSuccess(data);
     }
 
     @GetMapping("/{userId}")
     public ApiResponse<RankResponseDTO.MyRankDTO> getMyRanking(@PathVariable Long userId) {
         RankResponseDTO.MyRankDTO data = rankService.getMyRanking(userId);
+        return ApiResponse.onSuccess(data);
+    }
+
+    @GetMapping("/rankings/top3")
+    public ApiResponse<RankResponseDTO.TopAllDTO> getTop3() {
+        RankResponseDTO.TopAllDTO data = rankService.getTop3();
         return ApiResponse.onSuccess(data);
     }
 }
