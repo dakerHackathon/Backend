@@ -75,4 +75,21 @@ public class TeamResponseDTO {
         String startAt;
         String endAt;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PositionsDTO {
+        List<PositionDTO> positions;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PositionDTO {
+        int id;
+        String name;
+    }
 }

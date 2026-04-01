@@ -182,6 +182,17 @@ public class TeamService {
                 .articleId(article.getId()).build();
     }
 
+    public TeamResponseDTO.PositionsDTO getPositions() {
+        return TeamResponseDTO.PositionsDTO.builder()
+                .positions(
+                        positionRepository.findAll().stream()
+                                .map(position -> TeamResponseDTO.PositionDTO.builder()
+                                        .id(position.getId())
+                                        .name(position.getName()).build()
+                                ).toList())
+                .build();
+    }
+
 
 
     // 팀 초대, 참가

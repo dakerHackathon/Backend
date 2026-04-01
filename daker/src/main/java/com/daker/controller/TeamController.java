@@ -78,6 +78,12 @@ public class TeamController {
         return ApiResponse.onSuccess(data);
     }
 
+    @GetMapping("/positions")
+    public ApiResponse<TeamResponseDTO.PositionsDTO> getPositions() {
+        TeamResponseDTO.PositionsDTO data = teamService.getPositions();
+        return ApiResponse.onSuccess(data);
+    }
+
 
 
     // 팀 초대/참가
