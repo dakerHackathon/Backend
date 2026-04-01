@@ -49,9 +49,9 @@ public class UserService {
 
     public void signup(UserRequestDTO.SignupDTO request) {
         Optional<User> dup1 = userRepository.findByEmail(request.getEmail());
-        if(!dup1.isPresent()) throw new ApiException(BAD_REQUEST);
+        if(dup1.isPresent()) throw new ApiException(BAD_REQUEST);
         Optional<User> dup2 = userRepository.findByLoginId(request.getLoginId());
-        if(!dup2.isPresent()) throw new ApiException(BAD_REQUEST);
+        if(dup2.isPresent()) throw new ApiException(BAD_REQUEST);
 
         User user = User.builder()
             .email(request.getEmail())
