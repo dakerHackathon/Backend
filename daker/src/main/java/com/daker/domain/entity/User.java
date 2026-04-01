@@ -51,7 +51,8 @@ public class User {
     private String github;
 
     @Column
-    private Integer point = 0;
+    @ColumnDefault("0")
+    private Integer point;
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> sentMessages = new ArrayList<>();

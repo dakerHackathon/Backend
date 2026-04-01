@@ -19,8 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.daker.util.code.ErrorCode.BAD_REQUEST;
-import static com.daker.util.code.ErrorCode.NOT_FOUND_404;
+import static com.daker.util.code.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -49,9 +48,9 @@ public class UserService {
 
     public void signup(UserRequestDTO.SignupDTO request) {
         Optional<User> dup1 = userRepository.findByEmail(request.getEmail());
-        if(dup1.isPresent()) throw new ApiException(BAD_REQUEST);
+        if(dup1.isPresent()) throw new ApiException(EmailDuplicate);
         Optional<User> dup2 = userRepository.findByLoginId(request.getLoginId());
-        if(dup2.isPresent()) throw new ApiException(BAD_REQUEST);
+        if(dup2.isPresent()) throw new ApiException(LoginIdDuplicate);
 
         User user = User.builder()
             .email(request.getEmail())

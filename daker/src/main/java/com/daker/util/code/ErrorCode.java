@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode implements BaseErrorCode{
+    LoginIdDuplicate(HttpStatus.BAD_REQUEST, "400", "로그인 아이디가 중복되었습니다."),
+    EmailDuplicate(HttpStatus.BAD_REQUEST, "400", "이메일이 중복되었습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "400", "잘못된 요청입니다."),
     UNAUTHORIZED_401(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다"),
     FORBIDDEN_403(HttpStatus.FORBIDDEN, "COMMON403", "접근이 금지되었습니다"),
