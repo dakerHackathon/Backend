@@ -74,4 +74,7 @@ public interface UserTeamRepository extends JpaRepository<UserTeam, Long> {
 
     @Query("SELECT ut.position FROM UserTeam ut WHERE ut.user = :user AND ut.team = :team")
     Position getPositionByUserANDTeam(User user, Team team);
+
+    @Query("SELECT ut.user FROM UserTeam ut WHERE ut.team = :team AND ut.leader = true")
+    User findLeaderByTeam(@Param("team") Team team);
 }

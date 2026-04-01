@@ -194,7 +194,25 @@ public class TeamService {
                 .team(team)
                 .sender(user)
                 .receiver(userRepository.findById(request.getUserId()).orElseThrow(() -> new ApiException(NOT_FOUND_404)))
-                .position(positionRepository.findById(request.getPositionId()).orElseThrow(() -> new ApiException(BAD_REQUEST)))
+                .position(positionRepository.findById(request.getPosition()).orElseThrow(() -> new ApiException(BAD_REQUEST)))
+                .created_at(LocalDateTime.now()).build();
+
+        teamEnterRepository.save(teamEnter);
+    }
+
+    public void join(long userId, TeamRequestDTO.JoinDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        Team team = teamRepository.findById(request.getTeamId()).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        if(userTeamRepository.findAllUsersByTeam(team).size() >= 5) throw new ApiException(TEAM_MEMBER_EXCEEDED);
+
+        TeamEnter teamEnter = TeamEnter.builder()
+                .type(1)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .sender(user)
+                .team(team)
+                .receiver(userTeamRepository.findLeaderByTeam(team))
+                .position(positionRepository.findById(request.getPosition()).orElseThrow(() -> new ApiException(BAD_REQUEST)))
                 .created_at(LocalDateTime.now()).build();
 
         teamEnterRepository.save(teamEnter);

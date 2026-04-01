@@ -86,4 +86,11 @@ public class TeamController {
         teamService.invite(userId, teamId, request);
         return ApiResponse.onSuccess();
     }
+
+    @PostMapping("/{userId}/join")
+    public ApiResponse join(@PathVariable Long userId, @RequestBody TeamRequestDTO.JoinDTO request) {
+        teamService.join(userId, request);
+        return ApiResponse.onSuccess();
+    }
+
 }
