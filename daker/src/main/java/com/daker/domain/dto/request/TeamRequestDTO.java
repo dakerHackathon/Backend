@@ -81,4 +81,13 @@ public class TeamRequestDTO {
         String title;
         String content;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AnswerDTO {
+        long invitationId;
+        boolean accept;
+    }
 }

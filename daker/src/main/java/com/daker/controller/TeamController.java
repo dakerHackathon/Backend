@@ -93,4 +93,9 @@ public class TeamController {
         return ApiResponse.onSuccess();
     }
 
+    @PostMapping("/")
+    public ApiResponse answer(@PathVariable Long userId, @RequestBody TeamRequestDTO.AnswerDTO request) {
+        teamService.answer(userId, request);
+        return ApiResponse.onSuccess();
+    }
 }

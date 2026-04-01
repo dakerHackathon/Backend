@@ -10,10 +10,14 @@ import com.daker.domain.entity.mapping.TeamEnter;
 import com.daker.domain.entity.mapping.TeamHackathon;
 import com.daker.domain.entity.mapping.UserTeam;
 import com.daker.repository.*;
+import com.daker.util.ApiResponse;
 import com.daker.util.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 
@@ -203,7 +207,7 @@ public class TeamService {
     public void join(long userId, TeamRequestDTO.JoinDTO request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
         Team team = teamRepository.findById(request.getTeamId()).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        if(userTeamRepository.findAllUsersByTeam(team).size() >= 5) throw new ApiException(TEAM_MEMBER_EXCEEDED);
+        if (userTeamRepository.findAllUsersByTeam(team).size() >= 5) throw new ApiException(TEAM_MEMBER_EXCEEDED);
 
         TeamEnter teamEnter = TeamEnter.builder()
                 .type(1)
@@ -216,5 +220,45 @@ public class TeamService {
                 .created_at(LocalDateTime.now()).build();
 
         teamEnterRepository.save(teamEnter);
+    }
+
+    public void answer(long userId, TeamRequestDTO.AnswerDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        TeamEnter teamEnter = teamEnterRepository.findById(request.getInvitationId()).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        if(teamEnter.getReceiver() != user) throw new ApiException(UNAUTHORIZED_401);
+
+        teamEnterRepository.delete(teamEnter);
+
+        switch (teamEnter.getType()) {
+            case 1 -> AnswerJoin(teamEnter.getSender(), teamEnter, request.isAccept());
+            case 2 -> AnswerInvite(user, teamEnter, request.isAccept());
+            default -> throw new ApiException(BAD_REQUEST);
+        }
+    }
+
+    public void AnswerJoin(User user, TeamEnter te, boolean accept) {
+        Team team = te.getTeam();
+
+        if(!accept) return;
+        if(userTeamRepository.findAllUsersByTeam(team).size() >= 5) throw new ApiException(TEAM_MEMBER_EXCEEDED);
+
+        UserTeam ut = UserTeam.builder()
+                .user(user)
+                .team(team)
+                .position(te.getPosition()).build();
+        userTeamRepository.save(ut);
+    }
+
+    public void AnswerInvite(User user, TeamEnter te, boolean accept) {
+        Team team = te.getTeam();
+
+        if(!accept) return;
+        if(userTeamRepository.findAllUsersByTeam(team).size() >= 5) throw new ApiException(TEAM_MEMBER_EXCEEDED);
+
+        UserTeam ut = UserTeam.builder()
+                .user(user)
+                .team(team)
+                .position(te.getPosition()).build();
+        userTeamRepository.save(ut);
     }
 }
