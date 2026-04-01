@@ -57,7 +57,9 @@ public class UserService {
             .loginId(request.getLoginId())
             .password(request.getPassword())
             .name(request.getName())
-            .nickname(request.getNickName()).build();
+            .nickname(request.getNickName())
+            .point(0)
+            .temperature(37f).build();
     
         userRepository.save(user);
     }
@@ -203,6 +205,15 @@ public class UserService {
         });
     }
 
+    public UserResponseDTO.SkillsDTO getSkills() {
+        return UserResponseDTO.SkillsDTO.builder()
+                .skills(skillRepository.findAll().stream()
+                .map(skill -> UserResponseDTO.SkillDTO.builder()
+                        .id(skill.getId())
+                        .name(skill.getName()).build())
+                .toList()).build();
+    }
+
 
     // 온도 측정
     public UserResponseDTO.TemperatureSetListDTO getTemperatureSetting(long userId, long teamId) {
@@ -222,12 +233,12 @@ public class UserService {
     }
 
     public void setTemperature(long userId, long teamId, UserRequestDTO.SetTemperatureDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        User target = userRepository.findById(request.getUserId()).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        User target = userRepository.findById(request.getUserId()).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
         userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         userTeamRepository.findByUserAndTeam(target, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
-        if(temperatureSetRepository.findByFromUserAndToUserAndTeam(user, target, team).isPresent()) throw new ApiException(BAD_REQUEST);
+        if(temperatureSetRepository.findByFromUserAndToUserAndTeam(user, target, team).isPresent()) throw new ApiException(BEFORE_TEMPERATURE_SET);
 
         temperatureSetRepository.save(TemperatureSet.builder()
                 .fromUser(user)

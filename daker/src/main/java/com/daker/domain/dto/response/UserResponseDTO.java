@@ -148,4 +148,21 @@ public class UserResponseDTO {
         String userEmail;
         boolean canSet;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SkillsDTO {
+        List<SkillDTO> skills;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SkillDTO {
+        long id;
+        String name;
+    }
 }

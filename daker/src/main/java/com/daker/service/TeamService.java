@@ -38,8 +38,8 @@ public class TeamService {
     private final TeamEnterRepository teamEnterRepository;
 
     public TeamResponseDTO.GetTeamDetailDTO getTeamDetail(long userId, long teamId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
         userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
 
         return TeamResponseDTO.GetTeamDetailDTO.builder()
@@ -77,7 +77,7 @@ public class TeamService {
     }
 
     public TeamResponseDTO.TeamIdDTO createTeam(long userId, TeamRequestDTO.CreateTeamDTO request) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
 
         Team team = Team.builder()
                 .name(request.getName())
@@ -96,8 +96,8 @@ public class TeamService {
     }
 
     public void registerHackathon(long userId, long teamId, long hackathonId) {
-        User user = userRepository.findById(userId).get();
-        Team team = teamRepository.findById(teamId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
         Hackathon hackathon = hackathonRepository.findById(hackathonId).get();
 
         TeamHackathon teamHackathon = TeamHackathon.builder()
@@ -106,15 +106,15 @@ public class TeamService {
     }
 
     public void deleteTeam(long userId, long teamId) {
-        User user = userRepository.findById(userId).get();
-        Team team = teamRepository.findById(teamId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
 
         teamRepository.delete(team);
     }
 
     public void leaveTeam(long userId, long teamId) {
-        User user = userRepository.findById(userId).get();
-        Team team = teamRepository.findById(teamId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
 
         UserTeam userTeam = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         userTeamRepository.delete(userTeam);
@@ -125,11 +125,11 @@ public class TeamService {
     }
 
     public TeamResponseDTO.TeamIdDTO editTeam(long userId, long teamId, TeamRequestDTO.EditTeamInfoDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
 
         UserTeam ut = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
-        if(!ut.getLeader()) throw new ApiException(UNAUTHORIZED_401);
+        if(!ut.getLeader()) throw new ApiException(FORBIDDEN_403);
 
         team.setName(request.getName());
         team.setDescription(request.getDescription());
@@ -139,13 +139,13 @@ public class TeamService {
     }
 
     public void changeRole(long userId, long teamId, TeamRequestDTO.MemberEditDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
 
         UserTeam ut = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
-        if(!ut.getLeader()) throw new ApiException(UNAUTHORIZED_401);
+        if(!ut.getLeader()) throw new ApiException(FORBIDDEN_403);
 
-        User target = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User target = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
         UserTeam tRow = userTeamRepository.findByUserAndTeam(target, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         tRow.setPosition(positionRepository.findById(request.getPositionId()).get());
 
@@ -158,8 +158,8 @@ public class TeamService {
 
     // 공고글 관련
     public ArticleResponseDTO.ArticleIdDTO createArticle(long userId, long teamId, ArticleRequestDTO.CreateArticleDTO request) {
-        User user = userRepository.findById(userId).get();
-        Team team = teamRepository.findById(teamId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
 
         Article article = Article.builder()
                         .team(team)
@@ -186,10 +186,10 @@ public class TeamService {
 
     // 팀 초대, 참가
     public void invite(long userId, long teamId, TeamRequestDTO.InviteMemberDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
         UserTeam validation = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
-        if(!validation.getLeader()) throw new ApiException(UNAUTHORIZED_401);
+        if(!validation.getLeader()) throw new ApiException(FORBIDDEN_403);
 
         TeamEnter teamEnter = TeamEnter.builder()
                 .type(2)
@@ -197,7 +197,7 @@ public class TeamService {
                 .content(request.getContent())
                 .team(team)
                 .sender(user)
-                .receiver(userRepository.findById(request.getUserId()).orElseThrow(() -> new ApiException(NOT_FOUND_404)))
+                .receiver(userRepository.findById(request.getUserId()).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404)))
                 .position(positionRepository.findById(request.getPosition()).orElseThrow(() -> new ApiException(BAD_REQUEST)))
                 .created_at(LocalDateTime.now()).build();
 
@@ -205,8 +205,8 @@ public class TeamService {
     }
 
     public void join(long userId, TeamRequestDTO.JoinDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        Team team = teamRepository.findById(request.getTeamId()).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(request.getTeamId()).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
         if (userTeamRepository.findAllUsersByTeam(team).size() >= 5) throw new ApiException(TEAM_MEMBER_EXCEEDED);
 
         TeamEnter teamEnter = TeamEnter.builder()
@@ -223,9 +223,9 @@ public class TeamService {
     }
 
     public void answer(long userId, TeamRequestDTO.AnswerDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
         TeamEnter teamEnter = teamEnterRepository.findById(request.getInvitationId()).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        if(teamEnter.getReceiver() != user) throw new ApiException(UNAUTHORIZED_401);
+        if(teamEnter.getReceiver() != user) throw new ApiException(FORBIDDEN_403);
 
         teamEnterRepository.delete(teamEnter);
 

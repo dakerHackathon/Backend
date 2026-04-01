@@ -104,6 +104,12 @@ public class UserController {
         return ApiResponse.onSuccess();
     }
 
+    @GetMapping("/skills")
+    public ApiResponse<UserResponseDTO.SkillsDTO> getSkills() {
+        UserResponseDTO.SkillsDTO data = userService.getSkills();
+        return ApiResponse.onSuccess(data);
+    }
+
 
     // 온도 측정
     @GetMapping("/{userId}/temperature/{teamId}")
