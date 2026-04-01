@@ -3,6 +3,7 @@ package com.daker.service;
 import com.daker.domain.dto.request.UserRequestDTO;
 import com.daker.domain.dto.response.UserResponseDTO;
 import com.daker.domain.entity.*;
+import com.daker.domain.entity.mapping.TeamEnter;
 import com.daker.domain.entity.mapping.TeamHackathon;
 import com.daker.domain.entity.mapping.UserSkill;
 import com.daker.domain.entity.mapping.UserTeam;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.daker.util.code.ErrorCode.BAD_REQUEST;
+import static com.daker.util.code.ErrorCode.NOT_FOUND_404;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class UserService {
     private final TeamHackathonRepository teamHackathonRepository;
     private final TeamRepository teamRepository;
     private final SkillRepository skillRepository;
+    private final TeamEnterRepository teamEnterRepository;
 
     public UserResponseDTO.LoginDTO login(UserRequestDTO.LoginDTO request) {
         User user = userRepository.findIdByLoginIdandPassword(request.getLoginId(), request.getPassword());
@@ -62,7 +65,39 @@ public class UserService {
     public void withdrawalMembership(Long userId) {
         userRepository.deleteById(userId);
     }
-    
+
+
+    // 팀즈
+    public UserResponseDTO.InvitationListDTO getTeams(long userId, String type) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+
+        List<TeamEnter> invitations = new ArrayList<>();
+        if(type.equals("0")) invitations = teamEnterRepository.findAllBySender(user);
+        else invitations = teamEnterRepository.findAllBySenderAndType(user, Integer.parseInt(type));
+
+        List<UserResponseDTO.InvitationDTO> invitationDTOS = new ArrayList<>();
+        for(TeamEnter te : invitations) {
+            User sender = te.getSender();
+
+            UserResponseDTO.InvitationSenderDTO senderDTO = UserResponseDTO.InvitationSenderDTO.builder()
+                    .userId(sender.getId())
+                    .userName(sender.getName())
+                    .teamName(te.getTeam().getName()).build();
+
+            UserResponseDTO.InvitationDTO data = UserResponseDTO.InvitationDTO.builder()
+                    .invitationId(te.getId())
+                    .title(te.getTitle())
+                    .content(te.getContent())
+                    .type(te.getType())
+                    .sender(senderDTO)
+                    .position(te.getPosition().getId())
+                    .created_at(te.getCreated_at()).build();
+            invitationDTOS.add(data);
+        }
+
+        return UserResponseDTO.InvitationListDTO.builder()
+                .invitations(invitationDTOS).build();
+    }
     
     
     // 마이페이지

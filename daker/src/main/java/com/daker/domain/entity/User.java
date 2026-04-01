@@ -73,6 +73,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamEnter> teamEnterSenders = new ArrayList<>();
+
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TeamEnter> teamEnters = new ArrayList<>();
+    private List<TeamEnter> teamEnterReceivers = new ArrayList<>();
 }

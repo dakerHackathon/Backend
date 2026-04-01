@@ -70,6 +70,15 @@ public class UserController {
     }
 
 
+    // 팀즈
+    @GetMapping("/{userId}/invitations")
+    public ApiResponse<UserResponseDTO.InvitationListDTO> GetInvitations(@PathVariable Long userId, @RequestParam String type) {
+        UserResponseDTO.InvitationListDTO data = userService.getTeams(userId, type);
+        return ApiResponse.onSuccess(data);
+    }
+
+
+
     // 마이페이지
     @GetMapping("/{userId}/mypage")
     public ApiResponse<UserResponseDTO.MyPageDTO> getMyPage(@PathVariable Long userId) {

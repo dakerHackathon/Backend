@@ -1,7 +1,9 @@
 package com.daker.domain.dto.response;
 
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserResponseDTO {
@@ -94,5 +96,37 @@ public class UserResponseDTO {
         long userId;
         String userName;
         String userEmail;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InvitationListDTO {
+        List<InvitationDTO> invitations;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class InvitationDTO {
+        long invitationId;
+        String title;
+        String content;
+        int type;
+        InvitationSenderDTO sender;
+        int position;
+        LocalDateTime created_at;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InvitationSenderDTO {
+        long userId;
+        String userName;
+        String teamName;
     }
 }

@@ -1,5 +1,6 @@
 package com.daker.domain.entity.mapping;
 
+import com.daker.domain.entity.Position;
 import com.daker.domain.entity.Team;
 import com.daker.domain.entity.User;
 import jakarta.persistence.*;
@@ -36,8 +37,16 @@ public class TeamEnter {
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private User sender;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private User receiver;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id")
+    private Position position;
 
     @Column
     private LocalDateTime created_at;
