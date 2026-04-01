@@ -98,6 +98,11 @@ public class UserService {
         return UserResponseDTO.InvitationListDTO.builder()
                 .invitations(invitationDTOS).build();
     }
+
+    public void deleteInvitation(long userId, long invitationId) {
+        TeamEnter invitation = teamEnterRepository.findById(invitationId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        teamEnterRepository.delete(invitation);
+    }
     
     
     // 마이페이지

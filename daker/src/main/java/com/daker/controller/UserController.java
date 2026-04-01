@@ -77,6 +77,12 @@ public class UserController {
         return ApiResponse.onSuccess(data);
     }
 
+    @DeleteMapping("/{userId}/invitations/delete")
+    public ApiResponse deleteInvitation(@PathVariable Long userId, @RequestBody UserRequestDTO.InvitationIdDTO request) {
+        userService.deleteInvitation(userId, request.getInvitationId());
+        return ApiResponse.onSuccess();
+    }
+
 
 
     // 마이페이지

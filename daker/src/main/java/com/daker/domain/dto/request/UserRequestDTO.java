@@ -46,4 +46,12 @@ public class UserRequestDTO {
     public static class SkillIdDTO {
         long id;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InvitationIdDTO {
+        long invitationId;
+    }
 }
