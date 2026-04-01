@@ -6,6 +6,7 @@ import com.daker.domain.dto.response.ArticleResponseDTO;
 import com.daker.domain.dto.response.TeamResponseDTO;
 import com.daker.domain.entity.*;
 import com.daker.domain.entity.mapping.TargetPosition;
+import com.daker.domain.entity.mapping.TeamEnter;
 import com.daker.domain.entity.mapping.TeamHackathon;
 import com.daker.domain.entity.mapping.UserTeam;
 import com.daker.repository.*;
@@ -30,6 +31,7 @@ public class TeamService {
     private final PositionRepository positionRepository;
     private final TargetPositionRepository targetPositionRepository;
     private final ArticleRepository articleRepository;
+    private final TeamEnterRepository teamEnterRepository;
 
     public TeamResponseDTO.GetTeamDetailDTO getTeamDetail(long userId, long teamId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
@@ -174,5 +176,27 @@ public class TeamService {
 
         return ArticleResponseDTO.ArticleIdDTO.builder()
                 .articleId(article.getId()).build();
+    }
+
+
+
+    // 팀 초대, 참가
+    public void invite(long userId, long teamId, TeamRequestDTO.InviteMemberDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        UserTeam validation = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
+        if(!validation.getLeader()) throw new ApiException(UNAUTHORIZED_401);
+
+        TeamEnter teamEnter = TeamEnter.builder()
+                .type(2)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .team(team)
+                .sender(user)
+                .receiver(userRepository.findById(request.getUserId()).orElseThrow(() -> new ApiException(NOT_FOUND_404)))
+                .position(positionRepository.findById(request.getPositionId()).orElseThrow(() -> new ApiException(BAD_REQUEST)))
+                .created_at(LocalDateTime.now()).build();
+
+        teamEnterRepository.save(teamEnter);
     }
 }

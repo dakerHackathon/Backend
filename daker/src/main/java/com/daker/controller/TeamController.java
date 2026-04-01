@@ -7,6 +7,7 @@ import com.daker.domain.dto.response.TeamResponseDTO;
 import com.daker.service.TeamService;
 import com.daker.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -75,5 +76,14 @@ public class TeamController {
     public ApiResponse<ArticleResponseDTO.ArticleIdDTO> createArticle(@PathVariable Long userId, @PathVariable Long teamId, @RequestBody ArticleRequestDTO.CreateArticleDTO request) {
         ArticleResponseDTO.ArticleIdDTO data = teamService.createArticle(userId, teamId, request);
         return ApiResponse.onSuccess(data);
+    }
+
+
+
+    // 팀 초대/참가
+    @PostMapping("/{userId}/invite/{teamId}")
+    public ApiResponse invite(@PathVariable Long userId, @PathVariable Long teamId, @RequestBody TeamRequestDTO.InviteMemberDTO request) {
+        teamService.invite(userId, teamId, request);
+        return ApiResponse.onSuccess();
     }
 }

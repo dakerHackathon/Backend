@@ -59,4 +59,15 @@ public class TeamRequestDTO {
         long userId;
         int positionId;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InviteMemberDTO {
+        long userId;
+        int positionId;
+        String title;
+        String content;
+    }
 }
