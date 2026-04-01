@@ -6,6 +6,7 @@ import com.daker.domain.entity.mapping.UserSkill;
 import com.daker.domain.entity.mapping.UserTeam;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class User {
     private String github;
 
     @Column
+    @ColumnDefault("0")
     private Integer point;
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
