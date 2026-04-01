@@ -112,7 +112,6 @@ public class UserResponseDTO {
     @NoArgsConstructor
     public static class InvitationDTO {
         long invitationId;
-        String title;
         String content;
         int type;
         InvitationSenderDTO sender;

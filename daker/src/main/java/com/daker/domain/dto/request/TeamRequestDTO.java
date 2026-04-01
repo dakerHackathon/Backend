@@ -67,7 +67,6 @@ public class TeamRequestDTO {
     public static class InviteMemberDTO {
         long userId;
         int position;
-        String title;
         String content;
     }
 
@@ -78,7 +77,6 @@ public class TeamRequestDTO {
     public static class JoinDTO {
         long teamId;
         int position;
-        String title;
         String content;
     }
 

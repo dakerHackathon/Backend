@@ -204,7 +204,6 @@ public class TeamService {
 
         TeamEnter teamEnter = TeamEnter.builder()
                 .type(2)
-                .title(request.getTitle())
                 .content(request.getContent())
                 .team(team)
                 .sender(user)
@@ -222,7 +221,6 @@ public class TeamService {
 
         TeamEnter teamEnter = TeamEnter.builder()
                 .type(1)
-                .title(request.getTitle())
                 .content(request.getContent())
                 .sender(user)
                 .team(team)

@@ -88,7 +88,6 @@ public class UserService {
 
             UserResponseDTO.InvitationDTO data = UserResponseDTO.InvitationDTO.builder()
                     .invitationId(te.getId())
-                    .title(te.getTitle())
                     .content(te.getContent())
                     .type(te.getType())
                     .sender(senderDTO)
