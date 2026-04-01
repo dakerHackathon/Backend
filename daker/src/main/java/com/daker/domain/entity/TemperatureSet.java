@@ -30,5 +30,5 @@ public class TemperatureSet {
     private User toUser;
 
     @Column
-    private int value;
+    private boolean value;
 }

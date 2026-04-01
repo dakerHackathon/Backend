@@ -54,4 +54,13 @@ public class UserRequestDTO {
     public static class InvitationIdDTO {
         long invitationId;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SetTemperatureDTO {
+        long userId;
+        boolean plus;
+    }
 }

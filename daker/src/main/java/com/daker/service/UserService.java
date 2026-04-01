@@ -204,6 +204,8 @@ public class UserService {
         });
     }
 
+
+    // 온도 측정
     public UserResponseDTO.TemperatureSetListDTO getTemperatureSetting(long userId, long teamId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
@@ -220,6 +222,26 @@ public class UserService {
                         .toList()).build();
     }
 
+    public void setTemperature(long userId, long teamId, UserRequestDTO.SetTemperatureDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User target = userRepository.findById(request.getUserId()).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
+        userTeamRepository.findByUserAndTeam(target, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
+        if(temperatureSetRepository.findByFromUserAndToUserAndTeam(user, target, team).isPresent()) throw new ApiException(BAD_REQUEST);
+
+        temperatureSetRepository.save(TemperatureSet.builder()
+                .fromUser(user)
+                .toUser(target)
+                .team(team)
+                .value(request.isPlus()).build());
+
+        target.setTemperature(target.getTemperature() + (request.isPlus() ? 0.3f : -0.1f));
+        userRepository.save(target);
+    }
+
+
+    // 검색
     public UserResponseDTO.UserInfoListDTO search(String query) {
         return UserResponseDTO.UserInfoListDTO.builder()
                 .users(userRepository.search(query).stream().map((user) ->

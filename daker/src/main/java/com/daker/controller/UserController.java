@@ -6,7 +6,6 @@ import com.daker.service.MessageService;
 import com.daker.service.UserService;
 import com.daker.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import com.daker.domain.dto.request.UserRequestDTO;
@@ -110,6 +109,13 @@ public class UserController {
     @GetMapping("/{userId}/temperature/{teamId}")
     public ApiResponse<UserResponseDTO.TemperatureSetListDTO> getTemperatureSetting(@PathVariable Long userId, @PathVariable Long teamId) {
         UserResponseDTO.TemperatureSetListDTO data = userService.getTemperatureSetting(userId, teamId);
+        return ApiResponse.onSuccess(data);
+    }
+
+    @PostMapping("/{userId}/temperature/{teamId}")
+    public ApiResponse setTemperatureSetting(@PathVariable("userId") Long userId, @PathVariable("teamId") Long teamId, @RequestBody UserRequestDTO.SetTemperatureDTO request) {
+        userService.setTemperature(userId, teamId, request);
+        return ApiResponse.onSuccess();
     }
 
 
