@@ -39,6 +39,7 @@ public class User {
     private String nickname;
 
     @Column
+    @ColumnDefault("37")
     private Float temperature;
 
     @Column
