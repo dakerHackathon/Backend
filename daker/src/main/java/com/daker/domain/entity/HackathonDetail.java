@@ -31,13 +31,13 @@ public class HackathonDetail {
     private String organizer;
 
     @Column
-    private LocalDate endApplyDate;
+    private LocalDateTime endApplyDate;
 
     @Column
-    private LocalDate endSubmissionDate;
+    private LocalDateTime endSubmissionDate;
 
     @Column
-    private LocalDate endEvaluationDate;
+    private LocalDateTime endEvaluationDate;
 
     @Lob
     private String submissionGuide;
