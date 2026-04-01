@@ -48,4 +48,7 @@ public class Hackathon {
 
     @OneToOne(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
     private HackathonDetail hackathonDetail;
+
+    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HackathonEvaluationCriteria> hackathonEvaluationCriteria;
 }
