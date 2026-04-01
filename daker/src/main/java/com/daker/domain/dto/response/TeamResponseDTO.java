@@ -33,4 +33,46 @@ public class TeamResponseDTO {
         Long teamId;
         String teamName;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetTeamDetailDTO {
+        TeamDetailDTO team;
+        List<TeamMemberDTO> member;
+        HackathonDTO hackathon;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamDetailDTO {
+        long teamId;
+        String teamName;
+        String description;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamMemberDTO {
+        long userId;
+        String nickName;
+        int position;
+        boolean isLeader;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HackathonDTO {
+        long hackathonId;
+        String hackathonName;
+        String startAt;
+        String endAt;
+    }
 }

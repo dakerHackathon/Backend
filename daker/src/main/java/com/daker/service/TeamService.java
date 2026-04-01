@@ -31,6 +31,34 @@ public class TeamService {
     private final TargetPositionRepository targetPositionRepository;
     private final ArticleRepository articleRepository;
 
+    public TeamResponseDTO.GetTeamDetailDTO getTeamDetail(long userId, long teamId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
+
+        return TeamResponseDTO.GetTeamDetailDTO.builder()
+                .team(TeamResponseDTO.TeamDetailDTO.builder()
+                        .teamId(team.getId())
+                        .teamName(team.getName())
+                        .description(team.getDescription()).build())
+                .member(userTeamRepository.findAllUsersByTeam(team).stream()
+                        .map((u) -> TeamResponseDTO.TeamMemberDTO.builder()
+                                .userId(u.getId())
+                                .nickName(u.getNickname())
+                                .position(userTeamRepository.getPositionByUserANDTeam(u, team).getId())
+                                .isLeader(userTeamRepository.findByUserAndTeam(u, team).get().getLeader()).build())
+                        .toList())
+                .hackathon(teamHackathonRepository.findAllByTeam(team).stream()
+                        .filter((th) -> th.getHackathon().getStartAt().isBefore(LocalDateTime.now()) && th.getHackathon().getEndAt().isAfter(LocalDateTime.now()))
+                        .map((th) -> TeamResponseDTO.HackathonDTO.builder()
+                                .hackathonId(th.getHackathon().getId())
+                                .hackathonName(th.getHackathon().getTitle())
+                                .startAt(th.getHackathon().getStartAt().toString())
+                                .endAt(th.getHackathon().getEndAt().toString()).build())
+                        .findFirst().orElse(null))
+                .build();
+    }
+
     public TeamResponseDTO.TeamInfoListDTO getOwnTeams(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
 

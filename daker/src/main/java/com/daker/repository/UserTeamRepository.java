@@ -1,5 +1,6 @@
 package com.daker.repository;
 
+import com.daker.domain.entity.Position;
 import com.daker.domain.entity.Team;
 import com.daker.domain.entity.User;
 import com.daker.domain.entity.mapping.UserTeam;
@@ -70,4 +71,7 @@ public interface UserTeamRepository extends JpaRepository<UserTeam, Long> {
 
     @Query("SELECT COUNT(DISTINCT th.hackathon.id) FROM UserTeam ut JOIN TeamHackathon th ON th.team = ut.team WHERE ut.user = :user")
     int getPartCount(User user);
+
+    @Query("SELECT ut.position FROM UserTeam ut WHERE ut.user = :user AND ut.team = :team")
+    Position getPositionByUserANDTeam(User user, Team team);
 }
