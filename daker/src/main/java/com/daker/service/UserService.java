@@ -69,7 +69,7 @@ public class UserService {
 
     // 팀즈
     public UserResponseDTO.InvitationListDTO getTeams(long userId, String type) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
 
         List<TeamEnter> invitations = new ArrayList<>();
         if(type.equals("0")) invitations = teamEnterRepository.findAllBySender(user);
@@ -109,7 +109,7 @@ public class UserService {
     public UserResponseDTO.MyPageDTO getMyPage(long userId) {
         UserResponseDTO.MyPageDTO result = new UserResponseDTO.MyPageDTO();
 
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
         result.setEmail(user.getEmail());
         result.setNickname(user.getNickname());
         result.setDescription(user.getDescription());
@@ -174,8 +174,8 @@ public class UserService {
     }
 
     public UserResponseDTO.UserInfoListDTO getTeamMembers(long userId, long teamId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
 
         return UserResponseDTO.UserInfoListDTO.builder().users(
                     userTeamRepository.findAllUsersByTeam(team).stream()
@@ -188,7 +188,7 @@ public class UserService {
     }
 
     public void editInfo(long userId, UserRequestDTO.EditInfoDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
         user.setNickname(request.getNickName());
         user.setDescription(request.getDescription());
         user.setPortfolio(request.getPortfolio());
@@ -206,9 +206,9 @@ public class UserService {
 
     // 온도 측정
     public UserResponseDTO.TemperatureSetListDTO getTemperatureSetting(long userId, long teamId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        UserTeam userTeams = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
+        UserTeam userTeams = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(NOT_FOUND_404));
 
         return UserResponseDTO.TemperatureSetListDTO.builder()
                 .members(userTeamRepository.findAllUsersByTeam(userTeams.getTeam()).stream()
