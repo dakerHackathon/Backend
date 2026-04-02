@@ -132,7 +132,7 @@ public class UserService {
             skills.add(UserResponseDTO.SkillIdDTO.builder()
                     .id(userSkill.getSkill().getId()).build());
         });
-        result.setStills(skills);
+        result.setSkills(skills);
 
         List<UserResponseDTO.SaveHackathonDTO> saveHackathons = new ArrayList<>();
         bookmarkRepository.findHackathonByUser(user).forEach((hackathon) -> {
