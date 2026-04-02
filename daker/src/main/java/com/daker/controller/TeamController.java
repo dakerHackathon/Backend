@@ -90,6 +90,12 @@ public class TeamController {
         return ApiResponse.onSuccess(data);
     }
 
+    @PostMapping("/{userId}/recruit/search")
+    public ApiResponse<ArticleResponseDTO.GetRecruitDTO> searchRecruit(@PathVariable Long userId, @RequestParam String filter, @RequestParam String query) {
+        ArticleResponseDTO.GetRecruitDTO data = teamService.searchRecruit(userId, filter, query);
+        return ApiResponse.onSuccess(data);
+    }
+
 
 
     // 팀 초대/참가

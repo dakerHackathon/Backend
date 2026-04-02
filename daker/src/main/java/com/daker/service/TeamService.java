@@ -258,6 +258,74 @@ public class TeamService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
+    public ArticleResponseDTO.GetRecruitDTO searchRecruit(Long userId, String filter, String query) {
+        String keyword = (query == null) ? "" : query.trim();
+        String searchFilter = (filter == null || filter.isBlank()) ? "title" : filter.trim().toLowerCase();
+
+        List<Article> articles;
+
+        if (keyword.isBlank()) {
+            articles = articleRepository.findAllWithTeam();
+        } else {
+            switch (searchFilter) {
+                case "title" -> articles = articleRepository.searchByTitleOrContent(keyword);
+                case "hack" -> articles = articleRepository.searchByHackathonTitle(keyword);
+                default -> throw new ApiException(BAD_REQUEST);
+            }
+        }
+
+        List<ArticleResponseDTO.RecruitDTO> result = articles.stream()
+                .map(article -> {
+                    Team team = article.getTeam();
+
+                    List<ArticleResponseDTO.PositionDTO> articlePositions = article.getTargetPositions().stream()
+                            .map(tp -> ArticleResponseDTO.PositionDTO.builder()
+                                    .position(tp.getPosition().getId())
+                                    .headCount(tp.getCount())
+                                    .build())
+                            .toList();
+
+                    List<Integer> teamPositions = userTeamRepository.findAllByTeam(team).stream()
+                            .map(userTeam -> userTeam.getPosition().getId())
+                            .distinct()
+                            .toList();
+
+                    TeamHackathon teamHackathon = teamHackathonRepository.findFirstByTeam(team)
+                            .orElse(null);
+
+                    ArticleResponseDTO.ConnectedHackathonDTO hackathonInfo = null;
+                    if (teamHackathon != null && teamHackathon.getHackathon() != null) {
+                        hackathonInfo = ArticleResponseDTO.ConnectedHackathonDTO.builder()
+                                .hackathonId(teamHackathon.getHackathon().getId())
+                                .hackathonTitle(teamHackathon.getHackathon().getTitle())
+                                .build();
+                    }
+
+                    return ArticleResponseDTO.RecruitDTO.builder()
+                            .article(ArticleResponseDTO.ArticleInfoDTO.builder()
+                                    .id(article.getId())
+                                    .title(article.getTitle())
+                                    .content(article.getContent())
+                                    .positions(articlePositions)
+                                    .isOpen(article.getIsOpen())
+                                    .createdAt(article.getCreatedAt().toString())
+                                    .build())
+                            .team(ArticleResponseDTO.CurrentTeamDTO.builder()
+                                    .id(team.getId())
+                                    .name(team.getName())
+                                    .positions(teamPositions)
+                                    .hackathon(hackathonInfo)
+                                    .build())
+                            .build();
+                })
+                .toList();
+
+        return ArticleResponseDTO.GetRecruitDTO.builder()
+                .articles(result)
+                .build();
+    }
+
 
 
     // 팀 초대, 참가
