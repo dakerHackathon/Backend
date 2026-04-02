@@ -197,7 +197,7 @@ public class UserService {
 
         userSkillRepository.findSkillsByUser(user).forEach((userSkill) -> userSkillRepository.delete(userSkill));
         request.getSkills().forEach((id) -> {
-            Skill skill = skillRepository.findById(id.getId()).get();
+            Skill skill = skillRepository.findById(id).get();
             userSkillRepository.save(UserSkill.builder()
                     .user(user)
                     .skill(skill).build());
