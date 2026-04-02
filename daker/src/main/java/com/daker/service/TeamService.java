@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.daker.util.code.ErrorCode.*;
 
@@ -190,6 +191,70 @@ public class TeamService {
                                         .id(position.getId())
                                         .name(position.getName()).build()
                                 ).toList())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleResponseDTO.GetRecruitDTO getArticles(String open, String position) {
+        boolean isOpen = open == null || open.isBlank() || open.equals("1") || open.equalsIgnoreCase("true");
+        Long positionId = (position == null || position.isBlank()) ? null : Long.parseLong(position);
+
+        List<Article> articles;
+
+        if (positionId == null) {
+            articles = articleRepository.findAllByIsOpenWithTeam(isOpen);
+        } else {
+            articles = articleRepository.findAllByIsOpenAndPositionWithTeam(isOpen, positionId);
+        }
+
+        List<ArticleResponseDTO.RecruitDTO> result = articles.stream()
+                .map(article -> {
+                    Team team = article.getTeam();
+
+                    List<ArticleResponseDTO.PositionDTO> articlePositions = article.getTargetPositions().stream()
+                            .map(tp -> ArticleResponseDTO.PositionDTO.builder()
+                                    .position(tp.getPosition().getId())
+                                    .headCount(tp.getCount())
+                                    .build())
+                            .toList();
+
+                    List<Integer> teamPositions = userTeamRepository.findAllByTeam(team).stream()
+                            .map(userTeam -> userTeam.getPosition().getId())
+                            .distinct()
+                            .toList();
+
+                    TeamHackathon teamHackathon = teamHackathonRepository.findFirstByTeam(team)
+                            .orElse(null);
+
+                    ArticleResponseDTO.ConnectedHackathonDTO hackathonInfo = null;
+                    if (teamHackathon != null && teamHackathon.getHackathon() != null) {
+                        hackathonInfo = ArticleResponseDTO.ConnectedHackathonDTO.builder()
+                                .hackathonId(teamHackathon.getHackathon().getId())
+                                .hackathonTitle(teamHackathon.getHackathon().getTitle())
+                                .build();
+                    }
+
+                    return ArticleResponseDTO.RecruitDTO.builder()
+                            .article(ArticleResponseDTO.ArticleInfoDTO.builder()
+                                    .id(article.getId())
+                                    .title(article.getTitle())
+                                    .content(article.getContent())
+                                    .positions(articlePositions)
+                                    .isOpen(article.getIsOpen())
+                                    .createdAt(article.getCreatedAt().toString())
+                                    .build())
+                            .team(ArticleResponseDTO.CurrentTeamDTO.builder()
+                                    .id(team.getId())
+                                    .name(team.getName())
+                                    .positions(teamPositions)
+                                    .hackathon(hackathonInfo)
+                                    .build())
+                            .build();
+                })
+                .toList();
+
+        return ArticleResponseDTO.GetRecruitDTO.builder()
+                .articles(result)
                 .build();
     }
 
