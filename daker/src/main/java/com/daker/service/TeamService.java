@@ -117,7 +117,7 @@ public class TeamService {
         User user = userRepository.findById(userId).get();
         Team team = teamRepository.findById(teamId).get();
 
-        UserTeam userTeam = userTeamRepository.findByUserAndTeam(user, team);
+        UserTeam userTeam = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         userTeamRepository.delete(userTeam);
     }
 
@@ -129,7 +129,7 @@ public class TeamService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
 
-        UserTeam ut = userTeamRepository.findByUserAndTeam(user, team);
+        UserTeam ut = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         if(!ut.getLeader()) throw new ApiException(UNAUTHORIZED_401);
 
         team.setName(request.getName());
@@ -143,11 +143,11 @@ public class TeamService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
 
-        UserTeam ut = userTeamRepository.findByUserAndTeam(user, team);
+        UserTeam ut = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         if(!ut.getLeader()) throw new ApiException(UNAUTHORIZED_401);
 
         User target = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
-        UserTeam tRow = userTeamRepository.findByUserAndTeam(target, team);
+        UserTeam tRow = userTeamRepository.findByUserAndTeam(target, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         tRow.setPosition(positionRepository.findById(request.getPositionId()).get());
 
         userTeamRepository.save(tRow);
