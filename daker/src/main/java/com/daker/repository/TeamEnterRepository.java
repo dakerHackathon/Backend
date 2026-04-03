@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TeamEnterRepository extends JpaRepository<TeamEnter, Long> {
-    List<TeamEnter> findAllBySender(User user);
+    List<TeamEnter> findAllByReceiver(User receiver);
 
-    List<TeamEnter> findAllBySenderAndType(User user, int type);
+    List<TeamEnter> findAllByReceiverAndType(User user, int type);
 }

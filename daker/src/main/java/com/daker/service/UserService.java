@@ -74,8 +74,8 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
 
         List<TeamEnter> invitations = new ArrayList<>();
-        if(type.equals("0")) invitations = teamEnterRepository.findAllBySender(user);
-        else invitations = teamEnterRepository.findAllBySenderAndType(user, Integer.parseInt(type));
+        if(type.equals("0")) invitations = teamEnterRepository.findAllByReceiver(user);
+        else invitations = teamEnterRepository.findAllByReceiverAndType(user, Integer.parseInt(type));
 
         List<UserResponseDTO.InvitationDTO> invitationDTOS = new ArrayList<>();
         for(TeamEnter te : invitations) {
