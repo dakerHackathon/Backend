@@ -32,7 +32,7 @@ public class UserRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class EditInfoDTO {
-        String nickName;
+        String nickname;
         String description;
         String portfolio;
         String github;

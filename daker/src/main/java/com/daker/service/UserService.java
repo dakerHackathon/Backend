@@ -8,13 +8,11 @@ import com.daker.domain.entity.mapping.TeamHackathon;
 import com.daker.domain.entity.mapping.UserSkill;
 import com.daker.domain.entity.mapping.UserTeam;
 import com.daker.repository.*;
-import com.daker.util.code.ErrorCode;
 import com.daker.util.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -190,7 +188,7 @@ public class UserService {
 
     public void editInfo(long userId, UserRequestDTO.EditInfoDTO request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
-        user.setNickname(request.getNickName());
+        user.setNickname(request.getNickname());
         user.setDescription(request.getDescription());
         user.setPortfolio(request.getPortfolio());
         user.setGithub(request.getGithub());
