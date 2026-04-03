@@ -36,14 +36,23 @@ public class UserRequestDTO {
         String description;
         String portfolio;
         String github;
-        List<SkillIdDTO> skills;
+        List<Long> skills;
     }
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SkillIdDTO {
-        long id;
+    public static class InvitationIdDTO {
+        long invitationId;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SetTemperatureDTO {
+        long userId;
+        boolean plus;
     }
 }

@@ -45,4 +45,13 @@ public class Hackathon {
 
     @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamHackathon> teamHackathons = new ArrayList<>();
+
+    @OneToOne(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private HackathonDetail hackathonDetail;
+
+    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HackathonEvaluationCriteria> hackathonEvaluationCriteria;
+
+    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HackathonSchedule> hackathonSchedules;
 }

@@ -59,4 +59,33 @@ public class TeamRequestDTO {
         long userId;
         int positionId;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InviteMemberDTO {
+        long userId;
+        int position;
+        String content;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class JoinDTO {
+        long teamId;
+        int position;
+        String content;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AnswerDTO {
+        long invitationId;
+        boolean accept;
+    }
 }

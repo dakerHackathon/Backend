@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByLoginId(String loginId);
     
-    @Query("SELECT cnt(u) FROM User u WHERE u.point > :point")
+    @Query("SELECT COUNT(u) FROM User u WHERE u.point > :point")
     int getRank(@Param("point") int point);
 
     @Query("SELECT u FROM User u WHERE u.nickname LIKE %:query%")
@@ -27,6 +27,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u ORDER BY u.temperature desc LIMIT 10")
     List<User> findTop10ByOrderByTemperatureDesc();
 
-    @Query("SELECT cnt(u) FROM User u WHERE u.temperature > :user")
+    @Query("SELECT COUNT(u) FROM User u WHERE u.temperature > :user")
     int getTempRank(@Param("user") User user);
 }

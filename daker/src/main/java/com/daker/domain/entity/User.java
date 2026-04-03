@@ -6,6 +6,7 @@ import com.daker.domain.entity.mapping.UserSkill;
 import com.daker.domain.entity.mapping.UserTeam;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class User {
     private String nickname;
 
     @Column
+    @ColumnDefault("37")
     private Float temperature;
 
     @Column
@@ -50,6 +52,7 @@ public class User {
     private String github;
 
     @Column
+    @ColumnDefault("0")
     private Integer point;
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -73,6 +76,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamEnter> teamEnterSenders = new ArrayList<>();
+
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TeamEnter> teamEnters = new ArrayList<>();
+    private List<TeamEnter> teamEnterReceivers = new ArrayList<>();
 }

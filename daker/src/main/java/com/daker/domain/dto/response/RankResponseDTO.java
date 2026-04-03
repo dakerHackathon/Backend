@@ -12,8 +12,18 @@ public class RankResponseDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Top10DTO {
+    public static class TopDTO {
         List<RankDTO> ranks;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TopAllDTO {
+        List<SimpleRankDTO> temp;
+        List<SimpleRankDTO> win;
+        List<SimpleRankDTO> part;
     }
 
     @Data
@@ -24,6 +34,15 @@ public class RankResponseDTO {
         long id;
         String nickname;
         String github;
+        float point;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SimpleRankDTO {
+        String nickname;
         float point;
     }
 

@@ -1,5 +1,6 @@
 package com.daker.repository;
 
+import com.daker.domain.entity.Position;
 import com.daker.domain.entity.Team;
 import com.daker.domain.entity.User;
 import com.daker.domain.entity.mapping.UserTeam;
@@ -8,13 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserTeamRepository extends JpaRepository<UserTeam, Long> {
     @Query("SELECT ut FROM UserTeam ut WHERE ut.team = :team AND ut.user = :user")
-    UserTeam findByUserAndTeam(@Param("user") User user, @Param("team") Team team);
+    Optional<UserTeam> findByUserAndTeam(@Param("user") User user, @Param("team") Team team);
 
     @Query("SELECT ut FROM UserTeam ut WHERE ut.user = :user")
     List<UserTeam> findAllByUser(@Param("user") User user);
+
+    @Query("SELECT ut FROM UserTeam ut JOIN FETCH ut.position WHERE ut.team = :team")
+    List<UserTeam> findAllByTeam(@Param("team") Team team);
 
     @Query("SELECT ut.user FROM UserTeam ut WHERE ut.team = :team")
     List<User> findAllUsersByTeam(@Param("team") Team team);
@@ -69,4 +74,10 @@ public interface UserTeamRepository extends JpaRepository<UserTeam, Long> {
 
     @Query("SELECT COUNT(DISTINCT th.hackathon.id) FROM UserTeam ut JOIN TeamHackathon th ON th.team = ut.team WHERE ut.user = :user")
     int getPartCount(User user);
+
+    @Query("SELECT ut.position FROM UserTeam ut WHERE ut.user = :user AND ut.team = :team")
+    Position getPositionByUserANDTeam(User user, Team team);
+
+    @Query("SELECT ut.user FROM UserTeam ut WHERE ut.team = :team AND ut.leader = true")
+    User findLeaderByTeam(@Param("team") Team team);
 }

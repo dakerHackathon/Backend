@@ -70,6 +70,21 @@ public class UserController {
     }
 
 
+    // 팀즈
+    @GetMapping("/{userId}/invitations")
+    public ApiResponse<UserResponseDTO.InvitationListDTO> GetInvitations(@PathVariable Long userId, @RequestParam String type) {
+        UserResponseDTO.InvitationListDTO data = userService.getTeams(userId, type);
+        return ApiResponse.onSuccess(data);
+    }
+
+    @DeleteMapping("/{userId}/invitations/delete")
+    public ApiResponse deleteInvitation(@PathVariable Long userId, @RequestBody UserRequestDTO.InvitationIdDTO request) {
+        userService.deleteInvitation(userId, request.getInvitationId());
+        return ApiResponse.onSuccess();
+    }
+
+
+
     // 마이페이지
     @GetMapping("/{userId}/mypage")
     public ApiResponse<UserResponseDTO.MyPageDTO> getMyPage(@PathVariable Long userId) {
@@ -86,6 +101,26 @@ public class UserController {
     @PatchMapping("/{userId}/mypage")
     public ApiResponse editInfo(@PathVariable Long userId, @RequestBody UserRequestDTO.EditInfoDTO request) {
         userService.editInfo(userId, request);
+        return ApiResponse.onSuccess();
+    }
+
+    @GetMapping("/skills")
+    public ApiResponse<UserResponseDTO.SkillsDTO> getSkills() {
+        UserResponseDTO.SkillsDTO data = userService.getSkills();
+        return ApiResponse.onSuccess(data);
+    }
+
+
+    // 온도 측정
+    @GetMapping("/{userId}/temperature/{teamId}")
+    public ApiResponse<UserResponseDTO.TemperatureSetListDTO> getTemperatureSetting(@PathVariable Long userId, @PathVariable Long teamId) {
+        UserResponseDTO.TemperatureSetListDTO data = userService.getTemperatureSetting(userId, teamId);
+        return ApiResponse.onSuccess(data);
+    }
+
+    @PostMapping("/{userId}/temperature/{teamId}")
+    public ApiResponse setTemperatureSetting(@PathVariable("userId") Long userId, @PathVariable("teamId") Long teamId, @RequestBody UserRequestDTO.SetTemperatureDTO request) {
+        userService.setTemperature(userId, teamId, request);
         return ApiResponse.onSuccess();
     }
 

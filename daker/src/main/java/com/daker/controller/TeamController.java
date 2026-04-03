@@ -7,6 +7,7 @@ import com.daker.domain.dto.response.TeamResponseDTO;
 import com.daker.service.TeamService;
 import com.daker.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TeamController {
     private final TeamService teamService;
+
+    @GetMapping("/{userId}/team/{teamId}")
+    public ApiResponse<TeamResponseDTO.GetTeamDetailDTO> getTeamDetail(@PathVariable Long userId, @PathVariable Long teamId) {
+        TeamResponseDTO.GetTeamDetailDTO data = teamService.getTeamDetail(userId, teamId);
+        return ApiResponse.onSuccess(data);
+    }
 
     @GetMapping("/{userId}/team")
     public ApiResponse<TeamResponseDTO.TeamInfoListDTO> getOwnTeams(@PathVariable Long userId) {
@@ -71,9 +78,59 @@ public class TeamController {
         return ApiResponse.onSuccess(data);
     }
 
+    @GetMapping("/positions")
+    public ApiResponse<TeamResponseDTO.PositionsDTO> getPositions() {
+        TeamResponseDTO.PositionsDTO data = teamService.getPositions();
+        return ApiResponse.onSuccess(data);
+    }
+
+    @GetMapping("/{userId}/recruit")
+    public ApiResponse<ArticleResponseDTO.GetRecruitDTO> getRecruit(@PathVariable Long userId, @RequestParam String open, @RequestParam String position) {
+        ArticleResponseDTO.GetRecruitDTO data = teamService.getArticles(open, position);
+        return ApiResponse.onSuccess(data);
+    }
+
+    @PostMapping("/{userId}/recruit/search")
+    public ApiResponse<ArticleResponseDTO.GetRecruitDTO> searchRecruit(@PathVariable Long userId, @RequestParam String filter, @RequestParam String query) {
+        ArticleResponseDTO.GetRecruitDTO data = teamService.searchRecruit(userId, filter, query);
+        return ApiResponse.onSuccess(data);
+    }
+    // 모집 공고글 수정
     @PatchMapping("/{userId}/recruit/{articleId}")
     public ApiResponse<ArticleResponseDTO.ArticleIdDTO> updateAriticle(@PathVariable Long userId, @PathVariable Long articleId, @RequestBody ArticleRequestDTO.CreateArticleDTO request){
         ArticleResponseDTO.ArticleIdDTO data = teamService.updateArticle(userId, articleId, request);
-        return ApiResponse.on
+        return ApiResponse.onSuccess(data);
+    }
+
+    @DeleteMapping("/{userId}/recruit")
+    public ApiResponse deleteAriticle(@PathVariable Long userId, @PathVariable Long articleId, @RequestBody ArticleRequestDTO.ArticleIdDTO request) {
+        teamService.deleteArticle(userId, articleId, request);
+        return ApiResponse.onSuccess();
+    }
+
+    @PostMapping("/{userId}/recruit/close")
+    public ApiResponse<ArticleResponseDTO.ArticleIdDTO> deadlineArticle(@PathVariable Long userId, @PathVariable Long articleId, @RequestBody ArticleRequestDTO.ArticleIdDTO request){
+        ArticleResponseDTO.ArticleIdDTO data = teamService.deadlineArticle(userId, articleId, request);
+        return ApiResponse.onSuccess(data);
+    }
+
+
+    // 팀 초대/참가
+    @PostMapping("/{userId}/invite/{teamId}")
+    public ApiResponse invite(@PathVariable Long userId, @PathVariable Long teamId, @RequestBody TeamRequestDTO.InviteMemberDTO request) {
+        teamService.invite(userId, teamId, request);
+        return ApiResponse.onSuccess();
+    }
+
+    @PostMapping("/{userId}/join")
+    public ApiResponse join(@PathVariable Long userId, @RequestBody TeamRequestDTO.JoinDTO request) {
+        teamService.join(userId, request);
+        return ApiResponse.onSuccess();
+    }
+
+    @PostMapping("/")
+    public ApiResponse answer(@PathVariable Long userId, @RequestBody TeamRequestDTO.AnswerDTO request) {
+        teamService.answer(userId, request);
+        return ApiResponse.onSuccess();
     }
 }
