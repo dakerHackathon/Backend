@@ -70,4 +70,10 @@ public class TeamController {
         ArticleResponseDTO.ArticleIdDTO data = teamService.createArticle(userId, teamId, request);
         return ApiResponse.onSuccess(data);
     }
+
+    @PatchMapping("/{userId}/recruit/{articleId}")
+    public ApiResponse<ArticleResponseDTO.ArticleIdDTO> updateAriticle(@PathVariable Long userId, @PathVariable Long articleId, @RequestBody ArticleRequestDTO.CreateArticleDTO request){
+        ArticleResponseDTO.ArticleIdDTO data = teamService.updateArticle(userId, articleId, request);
+        return ApiResponse.on
+    }
 }

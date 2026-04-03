@@ -124,7 +124,7 @@ public class TeamService {
 
     // 공고글 관련
     public ArticleResponseDTO.ArticleIdDTO createArticle(long userId, long teamId, ArticleRequestDTO.CreateArticleDTO request) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
         Team team = teamRepository.findById(teamId).get();
 
         Article article = Article.builder()
@@ -147,4 +147,6 @@ public class TeamService {
         return ArticleResponseDTO.ArticleIdDTO.builder()
                 .articleId(article.getId()).build();
     }
+
+    public
 }
