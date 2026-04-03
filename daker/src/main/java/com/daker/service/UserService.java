@@ -195,13 +195,14 @@ public class UserService {
         user.setPortfolio(request.getPortfolio());
         user.setGithub(request.getGithub());
 
-        userSkillRepository.findSkillsByUser(user).forEach((userSkill) -> userSkillRepository.delete(userSkill));
+        userSkillRepository.deleteAll(userSkillRepository.findSkillsByUser(user));
         request.getSkills().forEach((id) -> {
             Skill skill = skillRepository.findById(id).get();
             userSkillRepository.save(UserSkill.builder()
                     .user(user)
                     .skill(skill).build());
         });
+        userRepository.save(user);
     }
 
     public UserResponseDTO.SkillsDTO getSkills() {
