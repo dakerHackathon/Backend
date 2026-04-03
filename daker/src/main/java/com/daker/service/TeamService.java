@@ -78,7 +78,7 @@ public class TeamService {
     }
 
     public TeamResponseDTO.TeamIdDTO createTeam(long userId, TeamRequestDTO.CreateTeamDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        User user = userRepository.findById(userId).get();
 
         Team team = Team.builder()
                 .name(request.getName())
@@ -97,8 +97,8 @@ public class TeamService {
     }
 
     public void registerHackathon(long userId, long teamId, long hackathonId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
+        User user = userRepository.findById(userId).get();
+        Team team = teamRepository.findById(teamId).get();
         Hackathon hackathon = hackathonRepository.findById(hackathonId).get();
 
         TeamHackathon teamHackathon = TeamHackathon.builder()
@@ -107,15 +107,15 @@ public class TeamService {
     }
 
     public void deleteTeam(long userId, long teamId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
+        User user = userRepository.findById(userId).get();
+        Team team = teamRepository.findById(teamId).get();
 
         teamRepository.delete(team);
     }
 
     public void leaveTeam(long userId, long teamId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
+        User user = userRepository.findById(userId).get();
+        Team team = teamRepository.findById(teamId).get();
 
         UserTeam userTeam = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         userTeamRepository.delete(userTeam);
@@ -126,11 +126,11 @@ public class TeamService {
     }
 
     public TeamResponseDTO.TeamIdDTO editTeam(long userId, long teamId, TeamRequestDTO.EditTeamInfoDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
 
         UserTeam ut = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
-        if(!ut.getLeader()) throw new ApiException(FORBIDDEN_403);
+        if(!ut.getLeader()) throw new ApiException(UNAUTHORIZED_401);
 
         team.setName(request.getName());
         team.setDescription(request.getDescription());
@@ -140,13 +140,13 @@ public class TeamService {
     }
 
     public void changeRole(long userId, long teamId, TeamRequestDTO.MemberEditDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
 
         UserTeam ut = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
-        if(!ut.getLeader()) throw new ApiException(FORBIDDEN_403);
+        if(!ut.getLeader()) throw new ApiException(UNAUTHORIZED_401);
 
-        User target = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        User target = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
         UserTeam tRow = userTeamRepository.findByUserAndTeam(target, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         tRow.setPosition(positionRepository.findById(request.getPositionId()).get());
 
@@ -324,6 +324,46 @@ public class TeamService {
         return ArticleResponseDTO.GetRecruitDTO.builder()
                 .articles(result)
                 .build();
+    }
+
+    // 모집글 수정
+    public ArticleResponseDTO.ArticleIdDTO updateArticle(Long userId, Long articleId, ArticleRequestDTO.CreateArticleDTO request) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+
+        article.setTitle(request.getTitle());
+        article.setContent(request.getContent());
+        article.setContact(request.getContact());
+        article = articleRepository.save(article);
+
+        List<TargetPosition> targets = targetPositionRepository.findAllByArticle(article);
+        targetPositionRepository.deleteAll(targets);
+
+        for(ArticleRequestDTO.LookingForDTO row : request.getLookingFor()) {
+            TargetPosition temp = TargetPosition.builder()
+                    .article(article)
+                    .position(positionRepository.findById(row.getPositionId()).get())
+                    .count(row.getHeadCount()).build();
+
+            targetPositionRepository.save(temp);
+        }
+
+        return ArticleResponseDTO.ArticleIdDTO.builder()
+                .articleId(article.getId()).build();
+    }
+
+    // 모집글 삭제
+    public void deleteArticle(Long userId, Long articleId, ArticleRequestDTO.ArticleIdDTO request){
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        articleRepository.delete(article);
+    }
+
+    // 모집글 마감
+    public ArticleResponseDTO.ArticleIdDTO deadlineArticle(Long userId, Long articleId, ArticleRequestDTO.ArticleIdDTO request){
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        article.setIsOpen(false);
+        articleRepository.save(article);
+        return ArticleResponseDTO.ArticleIdDTO.builder()
+                .articleId(article.getId()).build();
     }
 
 

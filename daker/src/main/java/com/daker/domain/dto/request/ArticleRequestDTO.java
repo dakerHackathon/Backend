@@ -28,4 +28,12 @@ public class ArticleRequestDTO {
         int positionId;
         int headCount;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ArticleIdDTO {
+        Long articleId;
+    }
 }
