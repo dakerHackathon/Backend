@@ -438,6 +438,7 @@ public class TeamService {
         UserTeam ut = UserTeam.builder()
                 .user(user)
                 .team(team)
+                .leader(false)
                 .position(te.getPosition()).build();
         userTeamRepository.save(ut);
     }
@@ -451,6 +452,7 @@ public class TeamService {
         UserTeam ut = UserTeam.builder()
                 .user(user)
                 .team(team)
+                .leader(false)
                 .position(te.getPosition()).build();
         userTeamRepository.save(ut);
     }
