@@ -268,17 +268,15 @@ public class TeamService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
     public ArticleResponseDTO.GetRecruitDTO searchRecruit(Long userId, String filter, String query) {
         String keyword = (query == null) ? "" : query.trim();
-        String searchFilter = (filter == null || filter.isBlank()) ? "title" : filter.trim().toLowerCase();
 
         List<Article> articles;
 
         if (keyword.isBlank()) {
             articles = articleRepository.findAllWithTeam();
         } else {
-            switch (searchFilter) {
+            switch (filter) {
                 case "title" -> articles = articleRepository.searchByTitleOrContent(keyword);
                 case "hack" -> articles = articleRepository.searchByHackathonTitle(keyword);
                 default -> throw new ApiException(BAD_REQUEST);
