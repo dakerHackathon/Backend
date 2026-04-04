@@ -91,5 +91,6 @@ public class TeamResponseDTO {
     public static class PositionDTO {
         int id;
         String name;
+        String abb;
     }
 }

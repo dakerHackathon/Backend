@@ -190,7 +190,8 @@ public class TeamService {
                         positionRepository.findAll().stream()
                                 .map(position -> TeamResponseDTO.PositionDTO.builder()
                                         .id(position.getId())
-                                        .name(position.getName()).build()
+                                        .name(position.getName())
+                                        .abb(position.getAbbreviation()).build()
                                 ).toList())
                 .build();
     }
