@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +37,29 @@ public class HackathonService {
     }
 
     public HackathonResponseDTO.getHackathonList hackathons(long userId){
+        List<Hackathon> hackathon = hackathonRepository.findAll();
         User user = userRepository.findById(userId).get();
+        List<Boolean> isStar = new ArrayList<>();
+        for(int i = 0; i < hackathon.size(); i++) {
+            Optional<Bookmark> bookmark = bookmarkRepository.findByUserAndHackathon(user, hackathon.get(i));
+            isStar.add(bookmark.isPresent());
+        }
 
+        List<HackathonResponseDTO.HackathonResponseDTOBuilder> result = new ArrayList<>();
+        for(int i = 0; i < hackathon.size(); i++) {
+            Hackathon currentHackathon = hackathon.get(i);
+            boolean currentIsStar = isStar.get(i);
 
+            result.add(HackathonResponseDTO.HackathonResponseDTOBuilder.builder()
+                    .id(currentHackathon.getId())
+                    .title(currentHackathon.getTitle())
+                    .start_at(currentHackathon.getStartAt().toString())
+                    .end_at(currentHackathon.getEndAt().toString())
+                    .location(currentHackathon.getLocation())
+                    .isStar(currentIsStar).build());
+        }
 
-        return null;
+        return HackathonResponseDTO.getHackathonList.builder()
+                .hackathons(result).build();
     }
 }
