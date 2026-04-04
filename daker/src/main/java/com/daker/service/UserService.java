@@ -218,6 +218,7 @@ public class UserService {
     public UserResponseDTO.TemperatureSetListDTO getTemperatureSetting(long userId, long hackathonId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
         Team team = teamRepository.findMyTeamInHackathon(hackathonRepository.findById(hackathonId).get(), user);
+        if(team == null) throw new ApiException(TEAM_NOT_FOUND_404);
         UserTeam userTeams = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(NOT_FOUND_404));
 
         return UserResponseDTO.TemperatureSetListDTO.builder()
@@ -231,10 +232,10 @@ public class UserService {
                         .toList()).build();
     }
 
-    public void setTemperature(long userId, long teamId, UserRequestDTO.SetTemperatureDTO request) {
+    public void setTemperature(long userId, long hackathonId, UserRequestDTO.SetTemperatureDTO request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
         User target = userRepository.findById(request.getUserId()).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
+        Team team = teamRepository.findMyTeamInHackathon(hackathonRepository.findById(hackathonId).get(), user);
         userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         userTeamRepository.findByUserAndTeam(target, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
         if(temperatureSetRepository.findByFromUserAndToUserAndTeam(user, target, team).isPresent()) throw new ApiException(BEFORE_TEMPERATURE_SET);

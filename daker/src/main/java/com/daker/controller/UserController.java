@@ -118,9 +118,9 @@ public class UserController {
         return ApiResponse.onSuccess(data);
     }
 
-    @PostMapping("/{userId}/temperature/{teamId}")
-    public ApiResponse setTemperatureSetting(@PathVariable("userId") Long userId, @PathVariable("teamId") Long teamId, @RequestBody UserRequestDTO.SetTemperatureDTO request) {
-        userService.setTemperature(userId, teamId, request);
+    @PostMapping("/{userId}/temperature/{hackathonId}")
+    public ApiResponse setTemperatureSetting(@PathVariable("userId") Long userId, @PathVariable("hackathonId") Long hackathonId, @RequestBody UserRequestDTO.SetTemperatureDTO request) {
+        userService.setTemperature(userId, hackathonId, request);
         return ApiResponse.onSuccess();
     }
 
