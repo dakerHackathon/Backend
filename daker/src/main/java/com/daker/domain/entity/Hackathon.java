@@ -1,7 +1,6 @@
 package com.daker.domain.entity;
 
 import com.daker.domain.entity.mapping.Bookmark;
-import com.daker.domain.entity.mapping.HackathonTag;
 import com.daker.domain.entity.mapping.TeamHackathon;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,9 +38,6 @@ public class Hackathon {
 
     @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
-
-    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HackathonTag> hackathonTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamHackathon> teamHackathons = new ArrayList<>();
