@@ -45,7 +45,7 @@ public class RankService {
 
         return RankResponseDTO.MyRankDTO.builder()
                 .temp(RankResponseDTO.RankPointDTO.builder()
-                        .rank(userRepository.getTempRank(user) + 1)
+                        .rank(userRepository.getTempRank(user.getTemperature()) + 1)
                         .point(user.getTemperature()).build())
                 .win(RankResponseDTO.RankPointDTO.builder()
                         .rank(userTeamRepository.getMyWinRank(user))

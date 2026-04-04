@@ -27,6 +27,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u ORDER BY u.temperature desc LIMIT 10")
     List<User> findTop10ByOrderByTemperatureDesc();
 
-    @Query("SELECT COUNT(u) FROM User u WHERE u.temperature > :user")
-    int getTempRank(@Param("user") User user);
+    @Query("SELECT COUNT(u) FROM User u WHERE u.temperature > :temperature")
+    int getTempRank(@Param("temperature") Float temperature);
 }
