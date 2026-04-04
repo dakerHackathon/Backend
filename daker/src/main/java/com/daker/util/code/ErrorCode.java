@@ -17,7 +17,9 @@ public enum ErrorCode implements BaseErrorCode{
     NOT_FOUND_404(HttpStatus.NOT_FOUND, "COMMON404", "요청한 자원을 찾을 수 없습니다"),
     INTERNAL_SERVER_ERROR_500(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버 내부 오류가 발생했습니다"),
     TEAM_MEMBER_EXCEEDED(HttpStatus.CONFLICT, "COMMON409", "충돌이 발생했습니다."),
-    BEFORE_TEMPERATURE_SET(HttpStatus.BAD_REQUEST, "400", "이미 측정했던 유저입니다.");
+    BEFORE_TEMPERATURE_SET(HttpStatus.BAD_REQUEST, "400", "이미 측정했던 유저입니다."),
+    BAD_POSITION_REQUEST(HttpStatus.BAD_REQUEST, "405", "잘못된 포지션 변경 요청입니다.");
+
     private final HttpStatus status;
     private final String code;
     private final String message;

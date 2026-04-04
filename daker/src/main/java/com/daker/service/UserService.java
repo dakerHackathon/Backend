@@ -253,6 +253,17 @@ public class UserService {
 
     // 검색
     public UserResponseDTO.UserInfoListDTO search(String query) {
+        if(query == null || query.isBlank()) {
+            return UserResponseDTO.UserInfoListDTO.builder()
+                    .users(userRepository.findAll().stream().map((user) ->
+                            UserResponseDTO.UserInfoDTO.builder()
+                                .userId(user.getId())
+                                .userName(user.getNickname())
+                                .userEmail(user.getEmail())
+                                .userDescription(user.getDescription()).build()
+                    ).toList()).build();
+        }
+
         return UserResponseDTO.UserInfoListDTO.builder()
                 .users(userRepository.search(query).stream().map((user) ->
                         UserResponseDTO.UserInfoDTO.builder()

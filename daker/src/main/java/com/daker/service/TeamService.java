@@ -148,7 +148,7 @@ public class TeamService {
 
         User target = userRepository.findById(userId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
         UserTeam tRow = userTeamRepository.findByUserAndTeam(target, team).orElseThrow(() -> new ApiException(BAD_REQUEST));
-        tRow.setPosition(positionRepository.findById(request.getPositionId()).get());
+        tRow.setPosition(positionRepository.findById(request.getPositionId()).orElseThrow(() -> new ApiException(BAD_POSITION_REQUEST)));
 
         userTeamRepository.save(tRow);
 
