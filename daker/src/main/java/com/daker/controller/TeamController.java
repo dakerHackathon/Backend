@@ -128,7 +128,7 @@ public class TeamController {
         return ApiResponse.onSuccess();
     }
 
-    @PostMapping("/")
+    @PostMapping("/{userId}/answer")
     public ApiResponse answer(@PathVariable Long userId, @RequestBody TeamRequestDTO.AnswerDTO request) {
         teamService.answer(userId, request);
         return ApiResponse.onSuccess();
