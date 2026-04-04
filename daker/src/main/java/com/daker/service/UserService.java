@@ -33,6 +33,7 @@ public class UserService {
     private final SkillRepository skillRepository;
     private final TeamEnterRepository teamEnterRepository;
     private final TemperatureSetRepository temperatureSetRepository;
+    private final HackathonRepository hackathonRepository;
 
     public UserResponseDTO.LoginDTO login(UserRequestDTO.LoginDTO request) {
         User user = userRepository.findIdByLoginIdandPassword(request.getLoginId(), request.getPassword());
@@ -214,9 +215,9 @@ public class UserService {
 
 
     // 온도 측정
-    public UserResponseDTO.TemperatureSetListDTO getTemperatureSetting(long userId, long teamId) {
+    public UserResponseDTO.TemperatureSetListDTO getTemperatureSetting(long userId, long hackathonId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new ApiException(TEAM_NOT_FOUND_404));
+        Team team = teamRepository.findMyTeamInHackathon(hackathonRepository.findById(hackathonId).get(), user);
         UserTeam userTeams = userTeamRepository.findByUserAndTeam(user, team).orElseThrow(() -> new ApiException(NOT_FOUND_404));
 
         return UserResponseDTO.TemperatureSetListDTO.builder()

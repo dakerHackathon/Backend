@@ -112,9 +112,9 @@ public class UserController {
 
 
     // 온도 측정
-    @GetMapping("/{userId}/temperature/{teamId}")
-    public ApiResponse<UserResponseDTO.TemperatureSetListDTO> getTemperatureSetting(@PathVariable Long userId, @PathVariable Long teamId) {
-        UserResponseDTO.TemperatureSetListDTO data = userService.getTemperatureSetting(userId, teamId);
+    @GetMapping("/{userId}/temperature/{hackathonId}")
+    public ApiResponse<UserResponseDTO.TemperatureSetListDTO> getTemperatureSetting(@PathVariable Long userId, @PathVariable Long hackathonId) {
+        UserResponseDTO.TemperatureSetListDTO data = userService.getTemperatureSetting(userId, hackathonId);
         return ApiResponse.onSuccess(data);
     }
 
