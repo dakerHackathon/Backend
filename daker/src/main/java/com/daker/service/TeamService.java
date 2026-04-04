@@ -369,10 +369,14 @@ public class TeamService {
     }
 
     // 모집글 마감
-    public ArticleResponseDTO.ArticleIdDTO deadlineArticle(Long userId, Long articleId, ArticleRequestDTO.ArticleIdDTO request){
-        Article article = articleRepository.findById(articleId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+    public ArticleResponseDTO.ArticleIdDTO deadlineArticle(Long userId, ArticleRequestDTO.ArticleIdDTO request){
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Article article = articleRepository.findById(request.getArticleId()).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+        if(article.getWriter().getId() != user.getId()) throw new ApiException(UNAUTHORIZED_401);
+
         article.setIsOpen(false);
         articleRepository.save(article);
+
         return ArticleResponseDTO.ArticleIdDTO.builder()
                 .articleId(article.getId()).build();
     }

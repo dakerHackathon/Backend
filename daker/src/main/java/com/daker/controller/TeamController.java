@@ -109,8 +109,8 @@ public class TeamController {
     }
 
     @PostMapping("/{userId}/recruit/close")
-    public ApiResponse<ArticleResponseDTO.ArticleIdDTO> deadlineArticle(@PathVariable Long userId, @PathVariable Long articleId, @RequestBody ArticleRequestDTO.ArticleIdDTO request){
-        ArticleResponseDTO.ArticleIdDTO data = teamService.deadlineArticle(userId, articleId, request);
+    public ApiResponse<ArticleResponseDTO.ArticleIdDTO> deadlineArticle(@PathVariable Long userId, @RequestBody ArticleRequestDTO.ArticleIdDTO request){
+        ArticleResponseDTO.ArticleIdDTO data = teamService.deadlineArticle(userId, request);
         return ApiResponse.onSuccess(data);
     }
 
