@@ -103,8 +103,8 @@ public class TeamController {
     }
 
     @DeleteMapping("/{userId}/recruit")
-    public ApiResponse deleteAriticle(@PathVariable Long userId, @PathVariable Long articleId, @RequestBody ArticleRequestDTO.ArticleIdDTO request) {
-        teamService.deleteArticle(userId, articleId, request);
+    public ApiResponse deleteAriticle(@PathVariable Long userId, @RequestBody ArticleRequestDTO.ArticleIdDTO request) {
+        teamService.deleteArticle(userId, request);
         return ApiResponse.onSuccess();
     }
 
