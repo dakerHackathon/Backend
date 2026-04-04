@@ -72,7 +72,7 @@ public class HackathonService {
         User user = userRepository.findById(userId).get();
         Boolean isStar = bookmarkRepository.findByUserAndHackathon(user, hackathon).isPresent();
 
-        List<TeamHackathon> teams = teamHackathonRepository.findAllByHackathon(hackathon);
+        List<TeamHackathon> joinTeams = teamHackathonRepository.findAllByHackathon(hackathon);
 
         HackathonResponseDTO.getHackathonDetail result = HackathonResponseDTO.getHackathonDetail.builder()
                     .hackathonId(hackathonId)
@@ -90,6 +90,10 @@ public class HackathonService {
                             .name(tmp.getName())
                             .percent(tmp.getPercent()).build()).toList())
                     .prize(List.of(hackathon.getHackathonDetail().getFirst(), hackathon.getHackathonDetail().getSecond(), hackathon.getHackathonDetail().getThird()))
+                    .teams(joinTeams.stream().map((t) -> HackathonResponseDTO.HackathonResponseDTOTeam.builder()
+                            .teamId(t.getTeam().getId())
+                            .teamName(t.getTeam().getName())
+                            .number(t.getTeam().getUserTeams().size()).build()).toList())
                     .leaderBoard(null)
                     .build();
 
