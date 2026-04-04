@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
-    @Query("SELECT t FROM Team t Join TeamHackathon th JOIN UserTeam ut WHERE th.hackathon = :hackathon AND ut.user = :user")
+    @Query("SELECT t FROM Team t Join TeamHackathon th ON t = th.team JOIN UserTeam ut ON t = ut.team WHERE th.hackathon = :hackathon AND ut.user = :user")
     Team findMyTeamInHackathon(@Param("hackathon") Hackathon hackathon, @Param("user") User user);
 }
