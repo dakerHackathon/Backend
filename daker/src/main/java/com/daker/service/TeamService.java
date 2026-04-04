@@ -104,7 +104,7 @@ public class TeamService {
         if(teamHackathonRepository.findByTeamAndHackathon(team).isPresent()) throw new ApiException(BAD_REQUEST);
         else {
             teamHackathonRepository.save(TeamHackathon.builder()
-                    .team(team).hackathon(hackathon).build());
+                    .team(team).hackathon(hackathon).ranking(0).build());
         }
     }
 
