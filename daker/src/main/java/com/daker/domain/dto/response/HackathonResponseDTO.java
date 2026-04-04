@@ -89,5 +89,11 @@ public class HackathonResponseDTO {
         List<HackathonResponseDTOLeaderBoard> leaderBoard;
     }
 
-
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class submitURLDTO {
+        String url;
+    }
 }

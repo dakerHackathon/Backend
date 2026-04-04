@@ -49,6 +49,9 @@ public class HackathonDetail {
     @Column
     private int third;
 
+    @Column
+    private String submitURL;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hackathon_id", nullable = false, unique = true)
     private Hackathon hackathon;

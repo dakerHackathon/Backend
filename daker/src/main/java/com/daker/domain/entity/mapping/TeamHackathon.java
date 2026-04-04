@@ -28,4 +28,10 @@ public class TeamHackathon {
 
     @Column
     private Integer ranking;
+
+    @Column
+    private boolean isSubmit;
+
+    @Column
+    private String memo;
 }

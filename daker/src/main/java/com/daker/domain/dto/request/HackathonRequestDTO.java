@@ -13,4 +13,12 @@ public class HackathonRequestDTO {
     public static class HackathonIdDTO {
         Long hackathonId;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SubmitDTO {
+        String memo;
+    }
 }

@@ -31,4 +31,10 @@ public class HackathonController {
         HackathonResponseDTO.getHackathonDetail data = hackathonService.hackathonDetail(userId, slug);
         return ApiResponse.onSuccess(data);
     }
+
+    @GetMapping("/{userId}/{slug}/upload")
+    public ApiResponse<HackathonResponseDTO.submitURLDTO> getSubmitURL(@PathVariable long userId, @PathVariable long slug, @RequestBody HackathonRequestDTO.SubmitDTO request) {
+        HackathonResponseDTO.submitURLDTO data = hackathonService.getSubmitUTL(userId, slug, request);
+        return ApiResponse.onSuccess(data);
+    }
 }

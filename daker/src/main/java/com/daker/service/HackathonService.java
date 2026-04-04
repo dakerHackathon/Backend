@@ -1,5 +1,6 @@
 package com.daker.service;
 
+import com.daker.domain.dto.request.HackathonRequestDTO;
 import com.daker.domain.dto.response.HackathonResponseDTO;
 import com.daker.domain.entity.HackathonDetail;
 import com.daker.domain.entity.Team;
@@ -8,11 +9,15 @@ import com.daker.domain.entity.Hackathon;
 import com.daker.domain.entity.User;
 import com.daker.domain.entity.mapping.TeamHackathon;
 import com.daker.repository.*;
+import com.daker.util.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+
+import static com.daker.util.code.ErrorCode.NOT_FOUND_404;
+import static com.daker.util.code.ErrorCode.USER_NOT_FOUND_404;
 
 @Service
 @RequiredArgsConstructor
@@ -98,5 +103,18 @@ public class HackathonService {
                     .build();
 
         return result;
+    }
+
+    public HackathonResponseDTO.submitURLDTO getSubmitUTL(long userId, long hackathonId, HackathonRequestDTO.SubmitDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
+        Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(() -> new ApiException(NOT_FOUND_404));
+
+        TeamHackathon th = teamHackathonRepository.findByUserAndHackathon(user, hackathon);
+        th.setSubmit(true);
+        th.setMemo(request.getMemo());
+        teamHackathonRepository.save(th);
+
+        return HackathonResponseDTO.submitURLDTO.builder()
+                .url(hackathon.getHackathonDetail().getSubmitURL()).build();
     }
 }
