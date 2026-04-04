@@ -1,12 +1,13 @@
 package com.daker.service;
 
 import com.daker.domain.dto.response.HackathonResponseDTO;
+import com.daker.domain.entity.HackathonDetail;
+import com.daker.domain.entity.Team;
 import com.daker.domain.entity.mapping.Bookmark;
 import com.daker.domain.entity.Hackathon;
 import com.daker.domain.entity.User;
-import com.daker.repository.BookmarkRepository;
-import com.daker.repository.HackathonRepository;
-import com.daker.repository.UserRepository;
+import com.daker.domain.entity.mapping.TeamHackathon;
+import com.daker.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,8 @@ public class HackathonService {
     private final UserRepository userRepository;
     private final HackathonRepository hackathonRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final TeamRepository teamRepository;
+    private final TeamHackathonRepository teamHackathonRepository;
 
     public void saveHackathon(long userId, long hackathonId) {
         User user = userRepository.findById(userId).get();
@@ -65,6 +68,19 @@ public class HackathonService {
 
 
     public HackathonResponseDTO.getHackathonDetail hackathonDetail(long userId, long hackathonId) {
+        List<Hackathon> hackathon = hackathonRepository.findAll();
+        User user = userRepository.findById(userId).get();
+        List<Boolean> isStar = new ArrayList<>();
+        for(int i = 0; i < hackathon.size(); i++) {
+            Optional<Bookmark> bookmark = bookmarkRepository.findByUserAndHackathon(user, hackathon.get(i));
+            isStar.add(bookmark.isPresent());
+        }
+        List<TeamHackathon> teams = teamHackathonRepository.findAll();
+
+
+
+
+
         return null;
     }
 }
