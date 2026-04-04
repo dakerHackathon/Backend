@@ -7,7 +7,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "TargetPosition")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

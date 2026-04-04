@@ -10,7 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "Position")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

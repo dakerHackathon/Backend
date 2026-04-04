@@ -11,7 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "Hackathon")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

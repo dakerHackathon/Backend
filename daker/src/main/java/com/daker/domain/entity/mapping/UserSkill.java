@@ -7,7 +7,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "UserSkill")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -7,7 +7,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "TeamHackathon")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

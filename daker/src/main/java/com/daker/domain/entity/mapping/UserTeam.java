@@ -8,7 +8,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "UserTeam")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -7,7 +7,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "Bookmark")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
