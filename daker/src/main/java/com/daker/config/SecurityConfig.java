@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // 프론트 주소로 명시
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:4173")); // 프론트 주소로 명시
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")); // 명시적으로
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // 쿠키 인증 미사용
