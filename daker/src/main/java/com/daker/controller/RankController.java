@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class RankController {
     private final RankService rankService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ApiResponse<RankResponseDTO.TopDTO> getRankings(@RequestParam String filter) {
         RankResponseDTO.TopDTO data = rankService.getRankings(filter);
         return ApiResponse.onSuccess(data);
@@ -24,7 +24,7 @@ public class RankController {
         return ApiResponse.onSuccess(data);
     }
 
-    @GetMapping("/rankings/top3")
+    @GetMapping("/top3")
     public ApiResponse<RankResponseDTO.TopAllDTO> getTop3() {
         RankResponseDTO.TopAllDTO data = rankService.getTop3();
         return ApiResponse.onSuccess(data);
