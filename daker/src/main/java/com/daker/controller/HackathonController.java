@@ -1,6 +1,7 @@
 package com.daker.controller;
 
 import com.daker.domain.dto.request.HackathonRequestDTO;
+import com.daker.domain.dto.response.HackathonResponseDTO;
 import com.daker.service.HackathonService;
 import com.daker.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,4 +19,11 @@ public class HackathonController {
         hackathonService.saveHackathon(userId, request.getHackathonId());
         return ApiResponse.onSuccess();
     }
+
+    @GetMapping()
+    public ApiResponse<HackathonResponseDTO.getHackathonList> hackathons(@PathVariable Long userId){
+        HackathonResponseDTO.getHackathonList data = hackathonService.hackathons(userId);
+        return ApiResponse.onSuccess(data);
+    }
+
 }

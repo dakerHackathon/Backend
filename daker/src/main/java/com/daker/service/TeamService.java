@@ -167,6 +167,7 @@ public class TeamService {
                         .title(request.getTitle())
                         .content(request.getContent())
                         .isOpen(true)
+                        .writer(user)
                         .createdAt(LocalDateTime.now())
                         .contact(request.getContact()).build();
         article = articleRepository.save(article);
@@ -310,6 +311,7 @@ public class TeamService {
                                     .content(article.getContent())
                                     .positions(articlePositions)
                                     .isOpen(article.getIsOpen())
+                                    .writer(article.getWriter().getId())
                                     .createdAt(article.getCreatedAt().toString())
                                     .build())
                             .team(ArticleResponseDTO.CurrentTeamDTO.builder()

@@ -1,5 +1,6 @@
 package com.daker.service;
 
+import com.daker.domain.dto.response.HackathonResponseDTO;
 import com.daker.domain.entity.mapping.Bookmark;
 import com.daker.domain.entity.Hackathon;
 import com.daker.domain.entity.User;
@@ -33,5 +34,13 @@ public class HackathonService {
                     .user(user).hackathon(hackathon).build();
             bookmarkRepository.save(newBookmark);
         }
+    }
+
+    public HackathonResponseDTO.getHackathonList hackathons(long userId){
+        User user = userRepository.findById(userId).get();
+
+
+
+        return null;
     }
 }
