@@ -127,8 +127,8 @@ public class UserController {
 
     // 검색
     @GetMapping("/search")
-    public ApiResponse<UserResponseDTO.UserInfoListDTO> userSearch(@RequestParam(required = false) String query) {
-        UserResponseDTO.UserInfoListDTO data = userService.search(query);
+    public ApiResponse<UserResponseDTO.UserInfoListDTO> userSearch(@RequestParam(required = false) String str) {
+        UserResponseDTO.UserInfoListDTO data = userService.search(str);
         return ApiResponse.onSuccess(data);
     }
 }
