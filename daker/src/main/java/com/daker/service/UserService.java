@@ -257,6 +257,7 @@ public class UserService {
                         UserResponseDTO.UserInfoDTO.builder()
                                 .userId(user.getId())
                                 .userName(user.getNickname())
-                                .userEmail(user.getEmail()).build()).toList()).build();
+                                .userEmail(user.getEmail())
+                                .userDescription(user.getDescription()).build()).toList()).build();
     }
 }

@@ -96,6 +96,7 @@ public class UserResponseDTO {
         long userId;
         String userName;
         String userEmail;
+        String userDescription;
     }
 
     @Data
