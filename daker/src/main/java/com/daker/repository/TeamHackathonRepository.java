@@ -25,6 +25,6 @@ public interface TeamHackathonRepository extends JpaRepository<TeamHackathon, Lo
 
     List<TeamHackathon> findAllByHackathon(Hackathon hackathon);
 
-    @Query("SELECT th FROM TeamHackathon th WHERE th.team = :team AND th.hackathon = :hackathon")
-    Optional<Object> findByTeamAndHackathon(@Param("team")Team team, @Param("hackathon")Hackathon hackathon);
+    @Query("SELECT th FROM TeamHackathon th WHERE th.team = :team")
+    Optional<Object> findByTeamAndHackathon(@Param("team")Team team);
 }
