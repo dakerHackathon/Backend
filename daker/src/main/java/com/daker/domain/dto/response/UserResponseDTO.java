@@ -28,7 +28,7 @@ public class UserResponseDTO {
         String description;
         String portfolio;
         String github;
-        List<SkillIdDTO> stills;
+        List<SkillIdDTO> skills;
         int point;
         float temperature;
         int rank;

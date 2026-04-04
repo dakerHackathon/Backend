@@ -32,19 +32,11 @@ public class UserRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class EditInfoDTO {
-        String nickName;
+        String nickname;
         String description;
         String portfolio;
         String github;
-        List<SkillIdDTO> skills;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class SkillIdDTO {
-        long id;
+        List<Long> skills;
     }
 
     @Data

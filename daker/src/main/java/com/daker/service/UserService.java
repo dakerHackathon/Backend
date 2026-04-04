@@ -8,13 +8,11 @@ import com.daker.domain.entity.mapping.TeamHackathon;
 import com.daker.domain.entity.mapping.UserSkill;
 import com.daker.domain.entity.mapping.UserTeam;
 import com.daker.repository.*;
-import com.daker.util.code.ErrorCode;
 import com.daker.util.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -74,8 +72,8 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
 
         List<TeamEnter> invitations = new ArrayList<>();
-        if(type.equals("0")) invitations = teamEnterRepository.findAllBySender(user);
-        else invitations = teamEnterRepository.findAllBySenderAndType(user, Integer.parseInt(type));
+        if(type.equals("0")) invitations = teamEnterRepository.findAllByReceiver(user);
+        else invitations = teamEnterRepository.findAllByReceiverAndType(user, Integer.parseInt(type));
 
         List<UserResponseDTO.InvitationDTO> invitationDTOS = new ArrayList<>();
         for(TeamEnter te : invitations) {
@@ -132,7 +130,7 @@ public class UserService {
             skills.add(UserResponseDTO.SkillIdDTO.builder()
                     .id(userSkill.getSkill().getId()).build());
         });
-        result.setStills(skills);
+        result.setSkills(skills);
 
         List<UserResponseDTO.SaveHackathonDTO> saveHackathons = new ArrayList<>();
         bookmarkRepository.findHackathonByUser(user).forEach((hackathon) -> {
@@ -190,18 +188,19 @@ public class UserService {
 
     public void editInfo(long userId, UserRequestDTO.EditInfoDTO request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(USER_NOT_FOUND_404));
-        user.setNickname(request.getNickName());
+        user.setNickname(request.getNickname());
         user.setDescription(request.getDescription());
         user.setPortfolio(request.getPortfolio());
         user.setGithub(request.getGithub());
 
-        userSkillRepository.findSkillsByUser(user).forEach((userSkill) -> userSkillRepository.delete(userSkill));
+        userSkillRepository.deleteAll(userSkillRepository.findSkillsByUser(user));
         request.getSkills().forEach((id) -> {
-            Skill skill = skillRepository.findById(id.getId()).get();
+            Skill skill = skillRepository.findById(id).get();
             userSkillRepository.save(UserSkill.builder()
                     .user(user)
                     .skill(skill).build());
         });
+        userRepository.save(user);
     }
 
     public UserResponseDTO.SkillsDTO getSkills() {

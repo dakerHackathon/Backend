@@ -84,6 +84,35 @@ public class TeamController {
         return ApiResponse.onSuccess(data);
     }
 
+    @GetMapping("/{userId}/recruit")
+    public ApiResponse<ArticleResponseDTO.GetRecruitDTO> getRecruit(@PathVariable Long userId, @RequestParam String open, @RequestParam String position) {
+        ArticleResponseDTO.GetRecruitDTO data = teamService.getArticles(open, position);
+        return ApiResponse.onSuccess(data);
+    }
+
+    @PostMapping("/{userId}/recruit/search")
+    public ApiResponse<ArticleResponseDTO.GetRecruitDTO> searchRecruit(@PathVariable Long userId, @RequestParam String filter, @RequestParam String query) {
+        ArticleResponseDTO.GetRecruitDTO data = teamService.searchRecruit(userId, filter, query);
+        return ApiResponse.onSuccess(data);
+    }
+    // 모집 공고글 수정
+    @PatchMapping("/{userId}/recruit/{articleId}")
+    public ApiResponse<ArticleResponseDTO.ArticleIdDTO> updateAriticle(@PathVariable Long userId, @PathVariable Long articleId, @RequestBody ArticleRequestDTO.CreateArticleDTO request){
+        ArticleResponseDTO.ArticleIdDTO data = teamService.updateArticle(userId, articleId, request);
+        return ApiResponse.onSuccess(data);
+    }
+
+    @DeleteMapping("/{userId}/recruit")
+    public ApiResponse deleteAriticle(@PathVariable Long userId, @PathVariable Long articleId, @RequestBody ArticleRequestDTO.ArticleIdDTO request) {
+        teamService.deleteArticle(userId, articleId, request);
+        return ApiResponse.onSuccess();
+    }
+
+    @PostMapping("/{userId}/recruit/close")
+    public ApiResponse<ArticleResponseDTO.ArticleIdDTO> deadlineArticle(@PathVariable Long userId, @PathVariable Long articleId, @RequestBody ArticleRequestDTO.ArticleIdDTO request){
+        ArticleResponseDTO.ArticleIdDTO data = teamService.deadlineArticle(userId, articleId, request);
+        return ApiResponse.onSuccess(data);
+    }
 
 
     // 팀 초대/참가
