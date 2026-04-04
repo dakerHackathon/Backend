@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HackathonResponseDTO {
@@ -29,4 +30,64 @@ public class HackathonResponseDTO {
     public static class getHackathonList {
         List<HackathonResponseDTOBuilder> hackathons;
     }
+
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HackathonResponseDTOSchedule {
+        String scheduleName;
+        String scheduleTime;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HackathonResponseDTOEval {
+        String name;
+        int percent;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HackathonResponseDTOTeam {
+        Long teamId;
+        String teamName;
+        int number;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HackathonResponseDTOLeaderBoard {
+        Long teamId;
+        String teamName;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getHackathonDetail {
+        Long hackathonId;
+        String hackathonTitle;
+        String hackathonSubTitle;
+        String description;
+        String organizer;
+        String location;
+        boolean isStar;
+        List<HackathonResponseDTOSchedule> schedule;
+        String submissionGuide;
+        List<HackathonResponseDTOEval> evaluationCriteria;
+        List<Integer> prize;
+        List<HackathonResponseDTOTeam> teams;
+        List<HackathonResponseDTOLeaderBoard> leaderBoard;
+    }
+
+
 }

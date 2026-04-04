@@ -62,4 +62,9 @@ public class HackathonService {
         return HackathonResponseDTO.getHackathonList.builder()
                 .hackathons(result).build();
     }
+
+
+    public HackathonResponseDTO.getHackathonDetail hackathonDetail(long userId, long hackathonId) {
+        return null;
+    }
 }

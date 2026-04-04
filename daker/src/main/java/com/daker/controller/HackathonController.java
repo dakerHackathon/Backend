@@ -20,10 +20,17 @@ public class HackathonController {
         return ApiResponse.onSuccess();
     }
 
-    @GetMapping()
+    @GetMapping("/{userId}")
     public ApiResponse<HackathonResponseDTO.getHackathonList> hackathons(@PathVariable Long userId){
         HackathonResponseDTO.getHackathonList data = hackathonService.hackathons(userId);
         return ApiResponse.onSuccess(data);
     }
+
+    @GetMapping("/{userId}/{slug}")
+    public ApiResponse<HackathonResponseDTO.getHackathonDetail> hackathonDetail(@PathVariable Long userId, @PathVariable Long slug){
+        HackathonResponseDTO.getHackathonDetail data = hackathonService.hackathonDetail(userId, slug);
+        return ApiResponse.onSuccess(data);
+    }
+
 
 }

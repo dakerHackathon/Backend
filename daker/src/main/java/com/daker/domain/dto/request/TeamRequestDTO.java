@@ -57,7 +57,7 @@ public class TeamRequestDTO {
     @AllArgsConstructor
     public static class MemberEditDTO {
         long userId;
-        int positionId;
+        int position;
     }
 
     @Data
