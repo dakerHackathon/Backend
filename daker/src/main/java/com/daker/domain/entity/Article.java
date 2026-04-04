@@ -36,6 +36,10 @@ public class Article {
     @Column(length = 255)
     private String contact;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private User writer;
+
     @Column
     private LocalDateTime createdAt;
 

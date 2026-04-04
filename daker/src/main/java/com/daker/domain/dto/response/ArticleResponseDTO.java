@@ -43,6 +43,7 @@ public class ArticleResponseDTO {
         String content;
         List<PositionDTO> positions;
         boolean isOpen;
+        long writer;
         String createdAt;
     }
 
