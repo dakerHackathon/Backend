@@ -23,6 +23,9 @@ public class Position {
     @Column(length = 255)
     private String name;
 
+    @Column
+    private String abbreviation;
+
     @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TargetPosition> targetPositions = new ArrayList<>();
 

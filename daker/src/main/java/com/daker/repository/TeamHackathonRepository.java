@@ -1,5 +1,6 @@
 package com.daker.repository;
 
+import com.daker.domain.entity.Hackathon;
 import com.daker.domain.entity.Team;
 import com.daker.domain.entity.mapping.TeamHackathon;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +22,6 @@ public interface TeamHackathonRepository extends JpaRepository<TeamHackathon, Lo
         WHERE th.team = :team
     """)
     Optional<TeamHackathon> findFirstByTeam(@Param("team") Team team);
+
+    List<TeamHackathon> findAllByHackathon(Hackathon hackathon);
 }

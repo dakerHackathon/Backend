@@ -68,19 +68,31 @@ public class HackathonService {
 
 
     public HackathonResponseDTO.getHackathonDetail hackathonDetail(long userId, long hackathonId) {
-        List<Hackathon> hackathon = hackathonRepository.findAll();
+        Hackathon hackathon = hackathonRepository.findById(hackathonId).get();
         User user = userRepository.findById(userId).get();
-        List<Boolean> isStar = new ArrayList<>();
-        for(int i = 0; i < hackathon.size(); i++) {
-            Optional<Bookmark> bookmark = bookmarkRepository.findByUserAndHackathon(user, hackathon.get(i));
-            isStar.add(bookmark.isPresent());
-        }
-        List<TeamHackathon> teams = teamHackathonRepository.findAll();
+        Boolean isStar = bookmarkRepository.findByUserAndHackathon(user, hackathon).isPresent();
 
+        List<TeamHackathon> teams = teamHackathonRepository.findAllByHackathon(hackathon);
 
+        HackathonResponseDTO.getHackathonDetail result = HackathonResponseDTO.getHackathonDetail.builder()
+                    .hackathonId(hackathonId)
+                    .hackathonTitle(hackathon.getTitle())
+                    .hackathonSubTitle(hackathon.getHackathonDetail().getSubTitle())
+                    .description(hackathon.getHackathonDetail().getDescription())
+                    .organizer(hackathon.getHackathonDetail().getOrganizer())
+                    .location(hackathon.getLocation())
+                    .isStar(isStar)
+                    .schedule(hackathon.getHackathonSchedules().stream().map((tmp) -> HackathonResponseDTO.HackathonResponseDTOSchedule.builder()
+                            .scheduleName(tmp.getName())
+                            .scheduleTime(tmp.getTime().toString()).build()).toList())
+                    .submissionGuide(hackathon.getHackathonDetail().getSubmissionGuide())
+                    .evaluationCriteria(hackathon.getHackathonEvaluationCriteria().stream().map((tmp) -> HackathonResponseDTO.HackathonResponseDTOEval.builder()
+                            .name(tmp.getName())
+                            .percent(tmp.getPercent()).build()).toList())
+                    .prize(List.of(hackathon.getHackathonDetail().getFirst(), hackathon.getHackathonDetail().getSecond(), hackathon.getHackathonDetail().getThird()))
+                    .leaderBoard(null)
+                    .build();
 
-
-
-        return null;
+        return result;
     }
 }
