@@ -31,6 +31,4 @@ public class HackathonController {
         HackathonResponseDTO.getHackathonDetail data = hackathonService.hackathonDetail(userId, slug);
         return ApiResponse.onSuccess(data);
     }
-
-
 }

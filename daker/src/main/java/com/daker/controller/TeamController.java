@@ -85,7 +85,7 @@ public class TeamController {
     }
 
     @GetMapping("/{userId}/recruit")
-    public ApiResponse<ArticleResponseDTO.GetRecruitDTO> getRecruit(@PathVariable Long userId, @RequestParam String open, @RequestParam String position) {
+    public ApiResponse<ArticleResponseDTO.GetRecruitDTO> getRecruit(@PathVariable Long userId, @RequestParam(required = false) String open, @RequestParam(required = false) String position) {
         ArticleResponseDTO.GetRecruitDTO data = teamService.getArticles(open, position);
         return ApiResponse.onSuccess(data);
     }

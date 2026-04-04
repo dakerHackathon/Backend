@@ -198,14 +198,21 @@ public class TeamService {
     @Transactional(readOnly = true)
     public ArticleResponseDTO.GetRecruitDTO getArticles(String open, String position) {
         boolean isOpen = open == null || open.isBlank() || open.equals("1") || open.equalsIgnoreCase("true");
-        Long positionId = (position == null || position.isBlank()) ? null : Long.parseLong(position);
+        Integer positionId = (position == null || position.isBlank()) ? null : Integer.parseInt(position);
 
-        List<Article> articles;
+        List<Article> articles = articleRepository.findAllByIsOpenWithTeam(isOpen);
 
-        if (positionId == null) {
-            articles = articleRepository.findAllByIsOpenWithTeam(isOpen);
-        } else {
-            articles = articleRepository.findAllByIsOpenAndPositionWithTeam(isOpen, positionId);
+        if (positionId != null) {
+            articles = articles.stream()
+                    .filter((a) -> {
+                        List<TargetPosition> targets = a.getTargetPositions();
+
+                        boolean ans = false;
+                        for(TargetPosition target : targets) {
+                            if(target.getPosition().getId() == positionId) ans = true;
+                        }
+                        return ans;
+                    }).toList();
         }
 
         List<ArticleResponseDTO.RecruitDTO> result = articles.stream()
