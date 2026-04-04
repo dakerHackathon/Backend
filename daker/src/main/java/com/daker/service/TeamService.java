@@ -102,10 +102,10 @@ public class TeamService {
         Hackathon hackathon = hackathonRepository.findById(hackathonId).get();
 
         if(teamHackathonRepository.findByTeamAndHackathon(team, hackathon).isPresent()) throw new ApiException(BAD_REQUEST);
-
-        TeamHackathon teamHackathon = TeamHackathon.builder()
-                .team(team).hackathon(hackathon).build();
-        teamHackathonRepository.save(teamHackathon);
+        else {
+            teamHackathonRepository.save(TeamHackathon.builder()
+                    .team(team).hackathon(hackathon).build());
+        }
     }
 
     public void deleteTeam(long userId, long teamId) {
